@@ -16,6 +16,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + "/")
       </ul>
     </nav>
     <div class="header-actions">
+      <a class="btn btn-outline btn-admin" href="/admin/">Admin</a>
       <a class="btn btn-primary btn-contact" href="/contact" aria-current={isCurrent("/contact") ? "page" : undefined}>Contact</a>
       <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch to dark theme">
         <Icon name="moon" class="i-moon" /><Icon name="sun" class="i-sun" />
@@ -36,6 +37,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + "/")
     <ul>
       {NAV.map((l) => <li><a href={l.href} aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</a></li>)}
       <li><a class="btn btn-primary" href="/contact">Contact</a></li>
+      <li><a class="btn btn-outline btn-admin-mobile" href="/admin/">Admin</a></li>
     </ul>
   </nav>
 </dialog>
@@ -65,6 +67,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + "/")
   }
   .header-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
   .btn-contact { display: none; min-height: 44px; padding: 10px 20px; }
+  .btn-admin { display: none; min-height: 44px; padding: 10px 16px; }
   .icon-btn {
     display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-sm);
     border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer;
@@ -78,6 +81,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + "/")
     .nav-desktop { display: block; }
     .header-actions { margin-left: 8px; }
     .btn-contact { display: inline-flex; }
+    .btn-admin { display: inline-flex; }
     .menu-btn { display: none; }
   }
 
@@ -94,4 +98,5 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + "/")
   }
   .mobile-menu li a[aria-current="page"]:not(.btn) { color: var(--accent); }
   .mobile-menu .btn { margin-top: 24px; width: 100%; }
+  .mobile-menu .btn-admin-mobile { margin-top: 0; }
 </style>

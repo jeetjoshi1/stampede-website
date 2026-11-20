@@ -1,5 +1,4 @@
 ---
-import { ADMIN } from "../lib/site";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -37,7 +36,7 @@ const extras = [
   { title: "Open source", text: "The estimator and simulation will be released as open source for Canadian student CubeSat teams." },
 ];
 ---
-<BaseLayout edit={[{ label: "Experiment page (GitHub)", href: ADMIN.github("src/pages/experiment.astro") }]} title="The Experiment" description="How STAMPEDE uses reaction wheels to estimate the full inertia tensor of a gimbal-mounted test article in reduced gravity, onboard and in real time, with recursive least squares and an extended Kalman filter.">
+<BaseLayout title="The Experiment" description="How STAMPEDE uses reaction wheels to estimate the full inertia tensor of a gimbal-mounted test article in reduced gravity, onboard and in real time, with recursive least squares and an extended Kalman filter.">
   <section class="section page-hero" aria-labelledby="page-title">
     <div class="container">
       <Eyebrow>The experiment</Eyebrow>

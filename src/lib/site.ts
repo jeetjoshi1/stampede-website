@@ -17,15 +17,6 @@ export const SITE = {
   sponsorshipPdf: (settings.sponsorshipPdf || null) as string | null,
 };
 
-// Links into the admin (/admin) for the "Edit this page" bar. Only signed-in editors see that bar.
-export type EditLink = { label: string; href: string };
-export const ADMIN = {
-  entry: (collection: string, entry: string) => `/admin/#/collections/${collection}/entries/${entry}`,
-  newPost: "/admin/#/collections/log/new",
-  // Pages that aren't in the admin are edited on GitHub.
-  github: (path: string) => `https://github.com/jeetjoshi1/stampede-website/edit/main/${path}`,
-};
-
 export const NAV = [
   { href: "/experiment", label: "Experiment" },
   { href: "/team", label: "Team" },

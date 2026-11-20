@@ -1,5 +1,4 @@
 ---
-import { ADMIN } from "../../lib/site";
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Eyebrow from "../../components/Eyebrow.astro";
@@ -13,7 +12,7 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 const date = post.data.date.toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 ---
-<BaseLayout edit={[{ label: "This post", href: ADMIN.entry("log", post.id) }, { label: "New post", href: ADMIN.newPost }]} title={post.data.title} description={post.data.summary ?? `STAMPEDE dev log: ${post.data.title}`}>
+<BaseLayout title={post.data.title} description={post.data.summary ?? `STAMPEDE dev log: ${post.data.title}`}>
   <article class="section">
     <div class="container post">
       <a class="btn btn-ghost back" href="/progress">← All progress</a>

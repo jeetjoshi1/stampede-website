@@ -1,5 +1,4 @@
 ---
-import { ADMIN } from "../../lib/site";
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Eyebrow from "../../components/Eyebrow.astro";
@@ -17,7 +16,7 @@ const arcD = Array.from({ length: 65 }, (_, k) => at(-0.04 + (k / 64) * 1.08))
 const fmt = (d: Date) => d.toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
 const statusLabel = { done: "Done", now: "Now", next: "Next" };
 ---
-<BaseLayout edit={[{ label: "New post", href: ADMIN.newPost }, { label: "Posts", href: "/admin/#/collections/log" }, { label: "Timeline", href: ADMIN.entry("site", "timeline") }]} title="Progress" description="STAMPEDE's road to CAN-RGX X: project timeline and development log.">
+<BaseLayout title="Progress" description="STAMPEDE's road to CAN-RGX X: project timeline and development log.">
   <section class="section" aria-labelledby="page-title">
     <div class="container">
       <Eyebrow>Progress</Eyebrow>
