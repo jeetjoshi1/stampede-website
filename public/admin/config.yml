@@ -3,9 +3,8 @@
 
 backend:
   name: github
-  # TODO: set to the GitHub repository that holds this project, e.g. your-username/stampede-website,
-  # to edit from the live site. Editing on localhost ("Work with Local Repository") does not need it.
-  repo: OWNER/stampede-website
+  # The GitHub repository that holds this project. Saving in /admin on the live site commits here.
+  repo: jeetjoshi1/stampede-website
   branch: main
 
 site_url: https://stampede-ucalgary.netlify.app
