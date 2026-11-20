@@ -12,9 +12,8 @@ update posts, team members, timeline, talks & events, partners, the photo galler
 3. Edit and click **Save**. The change is written straight into the files below, and the dev site updates instantly.
 4. Redeploy to Netlify to publish (see the bottom of this file).
 
-**On the live site (needs one-time setup):** editing at https://stampede-ucalgary.netlify.app/admin/ needs the project on
-GitHub with Netlify building from it, so that each Save commits to GitHub and Netlify republishes automatically.
-Until then, the live /admin page loads but you can't sign in.
+**On the live site:** open https://stampede-ucalgary.netlify.app/admin/ and sign in with GitHub (or a GitHub access token).
+Each Save commits to the GitHub repository, and Netlify republishes the site automatically about a minute later.
 
 Uploaded photos, logos and PDFs go in `public/uploads/`.
 
@@ -53,11 +52,15 @@ CCECE 2027 from https://attend.ieee.org/ccece-2027/.
 - The home page's "Current phase" follows whichever timeline milestone has `status: now`.
 - If the dev server shows an error after saving, it's almost always a missing quote or a wrong indent on the line you just edited.
 
-## Redeploying to Netlify
+## Publishing to Netlify
+
+Netlify builds the site from GitHub (jeetjoshi1/stampede-website) on every push to `main`, using the settings in
+[`netlify.toml`](netlify.toml). Saving in /admin while signed in with GitHub commits to `main`, so the live site updates
+by itself about a minute later. Edits made locally go live once they're committed and pushed (`git push`).
 
 Live preview: https://stampede-ucalgary.netlify.app (marked noindex, so search engines skip it).
 
-Stop `npm run dev` first, then:
+To deploy by hand instead (e.g. to test without pushing), stop `npm run dev` first, then:
 
 ```powershell
 $env:SITE_URL="https://stampede-ucalgary.netlify.app"; $env:NOINDEX="1"; npm run build

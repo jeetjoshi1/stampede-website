@@ -1,0 +1,18 @@
+# Netlify builds the site from GitHub on every push to main (including saves from /admin).
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Temporary preview address. Change to the real domain (and remove NOINDEX) when the site launches.
+  SITE_URL = "https://stampede-ucalgary.netlify.app"
+  # Keeps every page out of search engines while the site is a preview.
+  NOINDEX = "1"
+
+# Keep the admin page out of search results.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
