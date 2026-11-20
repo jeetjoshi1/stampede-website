@@ -1,0 +1,24 @@
+# EVENTS: edit at /admin (Talks & events), or by hand here.
+# kind: Talk, Event, School visit or Media (Media items appear under Media mentions).
+
+- id: ccece-2027
+  order: 1
+  title: IEEE CCECE 2027
+  kind: Event
+  place: Toronto Metropolitan University, Toronto
+  date: May 23–26, 2027
+  url: https://attend.ieee.org/ccece-2027/
+- id: ucalgary-symposia
+  order: 2
+  title: UCalgary student symposia
+  kind: Event
+  place: Calgary
+  date: null
+  url: null
+- id: school-visits
+  order: 3
+  title: School visits
+  kind: School visit
+  place: null
+  date: null
+  url: null

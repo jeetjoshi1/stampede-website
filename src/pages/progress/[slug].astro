@@ -1,0 +1,41 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Eyebrow from "../../components/Eyebrow.astro";
+import Icon from "../../components/Icon.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("log", (p) => !p.data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const date = post.data.date.toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+---
+<BaseLayout title={post.data.title} description={post.data.summary ?? `STAMPEDE dev log: ${post.data.title}`}>
+  <article class="section">
+    <div class="container post">
+      <a class="btn btn-ghost back" href="/progress">← All progress</a>
+      <Eyebrow>Dev log</Eyebrow>
+      <h1 class="post-title">{post.data.title}</h1>
+      <p class="post-meta"><time class="mono" datetime={post.data.date.toISOString().slice(0, 10)}>{date}</time> · {post.data.author}</p>
+      {post.data.tags.length > 0 && <ul class="tags">{post.data.tags.map((t) => <li class="pill">{t}</li>)}</ul>}
+      {post.data.cover && <img class="post-cover" src={post.data.cover} alt={post.data.coverAlt ?? ""} />}
+      <div class="prose"><Content /></div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post { max-width: 820px; }
+  .back { margin-bottom: 24px; min-height: 44px; }
+  .post-title { font-size: clamp(28px, 4vw, 44px); }
+  .post-meta { margin-top: 16px; color: var(--text-muted); }
+  .tags { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .post-cover { margin-top: 32px; border-radius: var(--radius-md); }
+  .prose { margin-top: 40px; }
+  .prose :global(h2) { margin: 48px 0 16px; }
+  .prose :global(h3) { margin: 32px 0 12px; }
+  .prose :global(img) { border-radius: var(--radius-md); }
+  .prose :global(pre) { overflow-x: auto; padding: 16px; border-radius: var(--radius-sm); background: var(--bg-alt); border: 1px solid var(--border); }
+</style>

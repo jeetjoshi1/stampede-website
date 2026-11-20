@@ -1,0 +1,213 @@
+@import "./tokens.css";
+
+/* Theme-dependent roles derived from the tokens (branding.md §3–§5). Only var() here, never hex. */
+:root {
+  --heading: var(--maroon);
+  --eyebrow: var(--primary);
+  --outline-fg: var(--primary);
+  --fullname-accent: var(--calgary-red);
+  --header-bg: color-mix(in srgb, var(--bg) 90%, transparent);
+  --shadow: 0 8px 24px rgba(14, 23, 38, 0.08);
+  --pad-x: 24px;
+  --section-y: 64px;
+}
+[data-theme="dark"] {
+  --heading: var(--text);
+  --eyebrow: var(--accent);
+  --outline-fg: var(--snow);
+  --fullname-accent: var(--gold-light);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --heading: var(--text);
+    --eyebrow: var(--accent);
+    --outline-fg: var(--snow);
+    --fullname-accent: var(--gold-light);
+  }
+}
+@media (min-width: 960px) {
+  :root { --pad-x: 48px; --section-y: 96px; }
+}
+
+/* Scopes that pin a theme regardless of the user's choice */
+.scope-cream {
+  --bg: var(--cream); --bg-alt: var(--paper); --surface: var(--white);
+  --text: var(--ink); --text-muted: var(--ink-muted); --border: var(--line);
+  --primary: var(--calgary-red); --primary-hover: var(--red-bright); --on-primary: var(--white);
+  --accent: var(--gold); --link: var(--calgary-red); --focus: var(--red-bright);
+  --heading: var(--maroon); --eyebrow: var(--calgary-red); --outline-fg: var(--calgary-red);
+  --fullname-accent: var(--calgary-red);
+  background: var(--bg);
+  color: var(--text);
+}
+.scope-night {
+  --bg: var(--night); --bg-alt: var(--night-surface); --surface: var(--night-surface);
+  --text: var(--snow); --text-muted: var(--snow-muted); --border: var(--night-line);
+  --primary: var(--red-bright); --on-primary: var(--white);
+  --accent: var(--gold-light); --link: var(--gold-light); --focus: var(--gold-light);
+  --heading: var(--snow); --eyebrow: var(--gold-light); --outline-fg: var(--snow);
+  --fullname-accent: var(--gold-light);
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+@media (min-width: 960px) { body { font-size: 18px; } }
+img, svg, video { display: block; max-width: 100%; }
+img { height: auto; }
+p { margin: 0 0 1em; max-width: 68ch; }
+p:last-child { margin-bottom: 0; }
+ul, ol { padding-left: 1.2em; }
+
+h1, h2, h3, h4 { margin: 0; color: var(--heading); text-wrap: balance; }
+h1, .h1 {
+  font-family: var(--font-display); font-weight: 800; text-transform: uppercase;
+  font-size: 38px; line-height: 1.05; letter-spacing: 0.02em; color: var(--heading);
+}
+h2, .h2 { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.2; }
+h3, .h3 { font-family: var(--font-body); font-weight: 700; font-size: 20px; line-height: 1.3; color: var(--text); }
+@media (min-width: 960px) {
+  h1, .h1 { font-size: 64px; }
+  h2, .h2 { font-size: 34px; }
+  h3, .h3 { font-size: 24px; }
+}
+.h1-sentence { text-transform: none; letter-spacing: 0; }
+
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+
+small, .small { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+.muted { color: var(--text-muted); }
+.mono, code, kbd { font-family: var(--font-mono); font-size: 15px; }
+.lede { font-size: 1.1em; color: var(--text); }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: 16px; top: -100px; z-index: 100;
+  background: var(--primary); color: var(--on-primary); padding: 12px 16px;
+  border-radius: var(--radius-sm); font-weight: 700; text-decoration: none;
+}
+.skip-link:focus { top: 12px; }
+
+/* ---------- Layout ---------- */
+.container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--pad-x); }
+.section { padding-block: var(--section-y); }
+.section-alt { background: var(--bg-alt); }
+.section-head { margin-bottom: var(--space-7); max-width: 68ch; }
+.section-head h2 + p { margin-top: var(--space-4); }
+.grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
+.stack > * + * { margin-top: var(--space-4); }
+.cards { display: grid; gap: 24px; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .cards-2, .cards-3, .cards-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 960px) {
+  .cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cards-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.split { display: grid; gap: var(--space-7); }
+@media (min-width: 960px) { .split { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8); } }
+
+/* ---------- Components (branding.md §10) ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 12px 22px; border: 2px solid transparent; border-radius: var(--radius-sm);
+  font: 700 16px/1.25 var(--font-body); text-decoration: none; cursor: pointer;
+  transition: background-color 150ms var(--ease), color 150ms var(--ease), border-color 150ms var(--ease);
+}
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn-primary { background: var(--primary); color: var(--on-primary); }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-outline { border-color: var(--outline-fg); color: var(--outline-fg); background: transparent; }
+.btn-outline:hover { background: var(--outline-fg); color: var(--bg); }
+.btn-ghost { color: var(--link); padding-inline: 4px; text-decoration: none; }
+.btn-ghost:hover { text-decoration: underline; text-underline-offset: 4px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: var(--space-5);
+}
+.card-accent { border-top: 3px solid var(--accent); }
+.card > h3 + p, .card > h3 + * { margin-top: var(--space-3); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: var(--radius-pill);
+  font: 700 12px/1.4 var(--font-body); text-transform: uppercase; letter-spacing: 0.06em;
+  background: var(--bg-alt); color: var(--text); border: 1px solid transparent; white-space: nowrap;
+}
+/* NOTE: branding.md §10 says done = --park, but --park is not defined in §3. Using maroon on cream text
+   (10.7:1) until the token is specified. */
+.pill-done { background: var(--maroon); color: var(--cream); }
+.pill-now { background: var(--calgary-red); color: var(--white); }
+.pill-next { background: transparent; color: var(--text-muted); border-color: var(--text-muted); }
+
+.todo {
+  display: inline-flex; align-items: center; max-width: 100%;
+  padding: 2px 10px; border: 1.5px dashed var(--accent); border-radius: var(--radius-pill);
+  font: 400 13px/1.5 var(--font-mono); color: var(--text-muted); background: transparent;
+  vertical-align: middle; text-align: left;
+}
+.todo-block { display: flex; border-radius: var(--radius-md); padding: var(--space-4) var(--space-5); }
+
+.eyebrow {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 var(--space-4);
+  font: 600 12px/1.4 var(--font-display); text-transform: uppercase; letter-spacing: 0.18em;
+  color: var(--eyebrow);
+}
+.eyebrow::before { content: ""; width: 24px; height: 2px; background: var(--accent); flex: none; }
+
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat-value { font: 800 44px/1 var(--font-display); color: var(--heading); }
+.stat-unit { font: 400 15px/1 var(--font-mono); color: var(--text-muted); margin-left: 6px; }
+.stat-caption { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+
+.spec-table { width: 100%; border-collapse: collapse; font: 400 15px/1.5 var(--font-mono); }
+.spec-table th, .spec-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+.spec-table thead th { font-family: var(--font-display); font-weight: 600; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+.spec-table tbody tr:nth-child(odd) { background: var(--bg-alt); }
+.spec-table .unit { text-align: right; color: var(--text-muted); white-space: nowrap; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); }
+.table-wrap .spec-table tr:last-child > * { border-bottom: 0; }
+
+.callout {
+  border: 1px solid var(--border); padding: var(--space-3) var(--space-4); background: var(--bg-alt);
+  border-radius: var(--radius-sm); font: 400 15px/1.6 var(--font-mono);
+}
+
+.telemetry { font: 400 13px/1.4 var(--font-mono); color: var(--text-muted); letter-spacing: 0.02em; }
+
+.fullname { font: 500 20px/1.4 var(--font-body); color: var(--text-muted); margin: var(--space-4) 0 0; max-width: none; }
+.fullname b { color: var(--fullname-accent); font-weight: 700; }
+
+/* CTA band on Calgary red */
+.band-red {
+  --focus: var(--gold-light);
+  background: var(--calgary-red); color: var(--white);
+}
+.band-red h2 { color: var(--white); }
+.btn-on-red { background: var(--cream); color: var(--calgary-red); }
+.btn-on-red:hover { background: var(--white); }
+
+/* ---------- Motion (branding.md §12) ---------- */
+html.js [data-reveal] { opacity: 0; transform: translateY(12px); transition: opacity 600ms var(--ease), transform 600ms var(--ease); }
+html.js [data-reveal].is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal] { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}

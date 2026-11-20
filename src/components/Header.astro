@@ -1,0 +1,97 @@
+---
+import { NAV } from "../lib/site";
+import Icon from "./Icon.astro";
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isCurrent = (href: string) => path === href || path.startsWith(href + "/");
+---
+<header class="site-header" data-header>
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="STAMPEDE home">
+      <img src="/brand/favicon.svg" alt="" width="40" height="40" />
+      <span class="wordmark">STAMPEDE</span>
+    </a>
+    <nav class="nav-desktop" aria-label="Main">
+      <ul>
+        {NAV.map((l) => <li><a href={l.href} aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-primary btn-contact" href="/contact" aria-current={isCurrent("/contact") ? "page" : undefined}>Contact</a>
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch to dark theme">
+        <Icon name="moon" class="i-moon" /><Icon name="sun" class="i-sun" />
+      </button>
+      <button class="icon-btn menu-btn" type="button" data-menu-open aria-haspopup="dialog" aria-label="Open menu">
+        <Icon name="menu" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="mobile-menu scope-night" data-menu aria-label="Menu">
+  <div class="container mobile-menu-top">
+    <a class="brand" href="/"><img src="/brand/favicon.svg" alt="" width="40" height="40" /><span class="wordmark">STAMPEDE</span></a>
+    <button class="icon-btn" type="button" data-menu-close aria-label="Close menu"><Icon name="x" /></button>
+  </div>
+  <nav class="container" aria-label="Main (mobile)">
+    <ul>
+      {NAV.map((l) => <li><a href={l.href} aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</a></li>)}
+      <li><a class="btn btn-primary" href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+</dialog>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 50; height: 72px;
+    background: var(--header-bg);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent; transition: border-color 300ms var(--ease);
+  }
+  .site-header.is-scrolled { border-bottom-color: var(--border); }
+  .header-inner { height: 100%; display: flex; align-items: center; gap: 24px; }
+  .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; min-height: 44px; }
+  .brand img { width: 40px; height: 40px; }
+  .wordmark { font: 800 18px/1 var(--font-display); letter-spacing: 0.02em; text-transform: uppercase; color: var(--heading); }
+  .nav-desktop { display: none; margin-left: auto; }
+  .nav-desktop ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  .nav-desktop a {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px;
+    color: var(--text); text-decoration: none; font-weight: 500; font-size: 16px;
+    border-radius: var(--radius-sm); position: relative;
+  }
+  .nav-desktop a:hover { color: var(--link); }
+  .nav-desktop a[aria-current="page"]::after {
+    content: ""; position: absolute; left: 12px; right: 12px; bottom: 6px; height: 2px; background: var(--accent);
+  }
+  .header-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .btn-contact { display: none; min-height: 44px; padding: 10px 20px; }
+  .icon-btn {
+    display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer;
+    transition: border-color 150ms var(--ease), color 150ms var(--ease);
+  }
+  .icon-btn:hover { border-color: var(--text-muted); }
+  :global(.i-sun) { display: none; }
+  :global([data-theme="dark"] .i-sun) { display: block; }
+  :global([data-theme="dark"] .i-moon) { display: none; }
+  @media (min-width: 960px) {
+    .nav-desktop { display: block; }
+    .header-actions { margin-left: 8px; }
+    .btn-contact { display: inline-flex; }
+    .menu-btn { display: none; }
+  }
+
+  .mobile-menu {
+    position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none;
+    margin: 0; padding: 0; border: 0;
+  }
+  .mobile-menu::backdrop { background: var(--night); }
+  .mobile-menu-top { height: 72px; display: flex; align-items: center; justify-content: space-between; }
+  .mobile-menu ul { list-style: none; margin: 0; padding: 32px 0; display: grid; gap: 8px; }
+  .mobile-menu li a:not(.btn) {
+    display: flex; align-items: center; min-height: 56px; color: var(--text); text-decoration: none;
+    font: 700 26px/1.2 var(--font-display); border-bottom: 1px solid var(--border);
+  }
+  .mobile-menu li a[aria-current="page"]:not(.btn) { color: var(--accent); }
+  .mobile-menu .btn { margin-top: 24px; width: 100%; }
+</style>

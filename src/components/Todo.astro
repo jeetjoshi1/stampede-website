@@ -1,0 +1,6 @@
+---
+// Visible placeholder for anything not yet confirmed (branding.md §14). Search the codebase for "TODO".
+interface Props { text?: string; block?: boolean }
+const { text = "", block = false } = Astro.props;
+---
+<span class:list={["todo", { "todo-block": block }]} data-todo>[TODO{text ? `: ${text}` : ""}]</span>

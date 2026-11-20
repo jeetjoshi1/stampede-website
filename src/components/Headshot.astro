@@ -1,0 +1,23 @@
+---
+// Round mission-patch crop: 3 px Calgary-red ring with a 2 px gap; greyscale → colour on hover (branding.md §7.4, §10).
+import Wheel from "./Wheel.astro";
+interface Props { src?: string | null; alt?: string; size?: number; initials?: string }
+const { src, alt = "", size = 160, initials } = Astro.props;
+---
+<div class="headshot" style={`--hs:${size}px`}>
+  {src ? (
+    <img src={src} alt={alt} width={size} height={size} loading="lazy" decoding="async" />
+  ) : (
+    <div class="headshot-empty" role="img" aria-label={alt || "Photo to come"}>
+      {initials ? <span class="initials" aria-hidden="true">{initials}</span> : <Wheel size={Math.round(size * 0.32)} />}
+    </div>
+  )}
+</div>
+<style>
+  .headshot { width: var(--hs); height: var(--hs); border-radius: 50%; border: 3px solid var(--calgary-red); padding: 2px; flex: none; max-width: 100%; }
+  .headshot img, .headshot-empty { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  .headshot img { filter: grayscale(1); transition: filter 300ms var(--ease); }
+  .headshot:hover img, :global(a:focus-visible) .headshot img, :global(.member:hover) .headshot img { filter: none; }
+  .headshot-empty { display: grid; place-items: center; background: var(--bg-alt); color: var(--accent); }
+  .initials { font: 700 calc(var(--hs) * 0.24)/1 var(--font-display); color: var(--heading); letter-spacing: 0.02em; }
+</style>

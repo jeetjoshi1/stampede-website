@@ -1,0 +1,119 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Eyebrow from "../../components/Eyebrow.astro";
+import Todo from "../../components/Todo.astro";
+import Satellite from "../../components/Satellite.astro";
+
+const nodes = (await getCollection("timeline")).sort((a, b) => a.data.order - b.data.order);
+const posts = (await getCollection("log", (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const n = nodes.length;
+// Desktop: nodes sit along an arc. x in %, y in px from the top of a 200 px tall stage.
+const at = (t: number) => ({ x: 4 + t * 92, y: 150 - Math.sin(Math.PI * (0.06 + t * 0.88)) * 110 });
+const arc = nodes.map((_, i) => at(n === 1 ? 0.5 : i / (n - 1)));
+const arcD = Array.from({ length: 65 }, (_, k) => at(-0.04 + (k / 64) * 1.08))
+  .map((p, k) => `${k ? "L" : "M"}${(p.x * 10).toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+const fmt = (d: Date) => d.toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
+const statusLabel = { done: "Done", now: "Now", next: "Next" };
+---
+<BaseLayout title="Progress" description="STAMPEDE's road to CAN-RGX X: project timeline and development log.">
+  <section class="section" aria-labelledby="page-title">
+    <div class="container">
+      <Eyebrow>Progress</Eyebrow>
+      <h1 id="page-title">Progress</h1>
+      <p class="lede intro">From team formation to flight and results: where we are, and what we've been building.</p>
+    </div>
+  </section>
+
+  <section class="section section-alt timeline-section" aria-labelledby="timeline-title">
+    <div class="container">
+      <h2 id="timeline-title" class="section-head">Timeline</h2>
+      <ol class="timeline" style={`--n:${n}`}>
+        <svg class="timeline-arc" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path d={arcD} class="arc-path" />
+        </svg>
+        {nodes.map((node, i) => (
+          <li class={`tl-node tl-${node.data.status}`} style={`--x:${arc[i].x}%;--y:${arc[i].y}px`} aria-current={node.data.status === "now" ? "step" : undefined}>
+            <span class="tl-dot" aria-hidden="true"></span>
+            {node.data.status === "now" && <span class="tl-sat" aria-hidden="true"><Satellite size={44} /></span>}
+            <div class="tl-text">
+              <span class={`pill pill-${node.data.status}`}>{statusLabel[node.data.status]}</span>
+              <span class="tl-title">{node.data.title}</span>
+              <span class="tl-date">{node.data.date ?? <Todo text="date" />}</span>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="log-title">
+    <div class="container">
+      <div class="section-head">
+        <Eyebrow>Dev log</Eyebrow>
+        <h2 id="log-title">Notes from the build</h2>
+      </div>
+      {posts.length === 0 ? (
+        <div class="card empty">
+          <p>No posts yet. The first entries will appear here as the build gets going.</p>
+          <p><Todo text="dev log: when does it go public? (branding.md §15.4)" /></p>
+        </div>
+      ) : (
+        <ul class="log-list">
+          {posts.map((p) => (
+            <li>
+              <article class="card log-card" data-reveal>
+                {p.data.cover && <img src={p.data.cover} alt={p.data.coverAlt ?? ""} loading="lazy" class="log-cover" />}
+                <div class="log-meta">
+                  <time class="mono" datetime={p.data.date.toISOString().slice(0, 10)}>{fmt(p.data.date)}</time>
+                  <span class="small">{p.data.author}</span>
+                </div>
+                <h3><a href={`/progress/${p.id}`}>{p.data.title}</a></h3>
+                {p.data.summary && <p>{p.data.summary}</p>}
+                {p.data.tags.length > 0 && <ul class="tags">{p.data.tags.map((t) => <li class="pill">{t}</li>)}</ul>}
+              </article>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro { margin-top: 24px; }
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 28px; position: relative; display: grid; gap: 28px; }
+  .timeline::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; border-left: 2px dotted var(--accent); }
+  .timeline-arc { display: none; }
+  .tl-node { position: relative; }
+  .tl-dot {
+    position: absolute; left: -28px; top: 4px; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--bg-alt); border: 2px solid var(--text-muted);
+  }
+  .tl-done .tl-dot { background: var(--maroon); border-color: var(--maroon); }
+  .tl-now .tl-dot { background: var(--calgary-red); border-color: var(--calgary-red); box-shadow: 0 0 0 4px var(--bg-alt), 0 0 0 6px var(--calgary-red); }
+  .tl-sat { position: absolute; left: 150px; top: -14px; }
+  .tl-text { display: grid; justify-items: start; gap: 6px; }
+  .tl-title { font-weight: 700; }
+  .tl-date { font: 400 15px/1.4 var(--font-mono); color: var(--text-muted); }
+
+  @media (min-width: 960px) {
+    .timeline { display: block; height: 300px; padding: 0; }
+    .timeline::before { display: none; }
+    .timeline-arc { display: block; position: absolute; left: 0; top: 0; width: 100%; height: 200px; overflow: visible; }
+    .arc-path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 1 9; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+    .tl-node { position: absolute; left: var(--x); top: var(--y); width: calc(100% / var(--n)); transform: translateX(-50%); }
+    .tl-dot { left: 50%; top: 0; transform: translate(-50%, -50%); }
+    .tl-text { justify-items: center; text-align: center; padding-top: 22px; }
+    .tl-sat { left: 50%; top: -64px; transform: translateX(-10%); }
+  }
+
+  .empty p { margin: 0 0 12px; }
+  .log-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 24px; }
+  .log-card { display: grid; gap: 8px; }
+  .log-cover { border-radius: var(--radius-sm); aspect-ratio: 16 / 9; object-fit: cover; width: 100%; }
+  .log-meta { display: flex; gap: 16px; align-items: baseline; }
+  .log-card h3 a { color: var(--text); text-decoration: none; }
+  .log-card h3 a:hover { color: var(--link); text-decoration: underline; }
+  .tags { list-style: none; padding: 0; margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+</style>

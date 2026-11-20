@@ -1,0 +1,19 @@
+---
+// Reaction-wheel motif: ring, 6 spokes, hub (branding.md §7.2). `spin` = slow loading-spinner rotation.
+interface Props { size?: number; spin?: boolean; class?: string; label?: string }
+const { size = 24, spin = false, class: cls, label } = Astro.props;
+const spokes = [0, 60, 120, 180, 240, 300].map((a) => {
+  const r = (a * Math.PI) / 180;
+  return { x1: 12 + 3.2 * Math.sin(r), y1: 12 - 3.2 * Math.cos(r), x2: 12 + 8.6 * Math.sin(r), y2: 12 - 8.6 * Math.cos(r) };
+});
+---
+<svg class:list={["wheel", { "wheel-spin": spin }, cls]} width={size} height={size} viewBox="0 0 24 24" fill="none"
+  stroke="currentColor" stroke-linecap="round" aria-hidden={label ? undefined : "true"} role={label ? "img" : undefined} aria-label={label}>
+  <circle cx="12" cy="12" r="10" stroke-width="2" />
+  {spokes.map((s) => <line x1={s.x1.toFixed(2)} y1={s.y1.toFixed(2)} x2={s.x2.toFixed(2)} y2={s.y2.toFixed(2)} stroke-width="1.5" />)}
+  <circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none" />
+</svg>
+<style>
+  .wheel-spin { animation: wheel-spin 6s linear infinite; transform-origin: 50% 50%; }
+  @keyframes wheel-spin { to { transform: rotate(360deg); } }
+</style>

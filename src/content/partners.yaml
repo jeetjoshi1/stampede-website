@@ -1,0 +1,25 @@
+# PARTNERS: edit at /admin (Partners), or by hand here.
+# Only add a logo once the partner has given WRITTEN permission (branding.md 9.5).
+# tier: Program, Funding, Industry or Academic.
+
+- id: schulich-ssaf
+  order: 1
+  name: Schulich SSAF
+  tier: Funding
+  support: null
+  url: null
+  logo: null
+- id: faculty-advisor
+  order: 2
+  name: Faculty advisor
+  tier: Funding
+  support: Travel co-funding
+  url: null
+  logo: null
+- id: sdtech-alberta
+  order: 3
+  name: SDTech Alberta
+  tier: Industry
+  support: Experiment build
+  url: null
+  logo: null

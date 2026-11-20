@@ -1,0 +1,23 @@
+---
+// Solid maroon skyline band (branding.md §7.3), traced from the patch's silhouette.
+// Towers sit in the centre; the low-rise strip tiles out to both edges so the band is always full width.
+import paths from "./skyline-paths.json";
+interface Props { id: string; class?: string }
+const { id, class: cls } = Astro.props;
+// Patch skyline spans x 140–661; centre (400) is moved to x 1200 of a 2400-unit-wide band.
+---
+<svg class:list={["skyline", cls]} viewBox="0 300 2400 230" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id={`lowrise-${id}`} patternUnits="userSpaceOnUse" x="940" y="300" width="521" height="230">
+      <path d={paths.lowrise} transform="translate(-140 -300)" />
+    </pattern>
+  </defs>
+  <rect x="0" y="300" width="2400" height="230" fill={`url(#lowrise-${id})`} />
+  <path d={paths.towers} transform="translate(800 0)" />
+  <rect x="0" y="521" width="2400" height="9" />
+</svg>
+<style>
+  .skyline { display: block; width: 100%; height: 110px; fill: var(--maroon); color: var(--maroon); }
+  .skyline :global(pattern path) { fill: var(--maroon); }
+  @media (min-width: 960px) { .skyline { height: 170px; } }
+</style>

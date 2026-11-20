@@ -1,0 +1,54 @@
+# TIMELINE: edit at /admin (Timeline), or by hand here.
+# status: done, now or next. Exactly one item should be now; the home page shows it as the current phase.
+# Sources: https://seds.ca/can-rgx/ (CAN-RGX 10 milestones, approximate) and https://attend.ieee.org/ccece-2027/
+
+- id: team-formed
+  order: 1
+  title: Team formed
+  date: Early Oct 2026
+  status: done
+- id: proposal
+  order: 2
+  title: Proposal submitted
+  date: Oct 23, 2026
+  status: done
+- id: selection
+  order: 3
+  title: Selected for CAN-RGX X
+  date: Nov 19, 2026
+  status: done
+- id: kickoff
+  order: 4
+  title: Kickoff & project plan
+  date: Late Nov – Dec 2026
+  status: now
+- id: pdr
+  order: 5
+  title: Preliminary design review
+  date: Feb 2027
+  status: next
+- id: cdr
+  order: 6
+  title: Critical design review
+  date: Apr 2027
+  status: next
+- id: ccece-2027
+  order: 7
+  title: IEEE CCECE 2027
+  date: May 23–26, 2027
+  status: next
+- id: flight-readiness
+  order: 8
+  title: Ground test & flight readiness
+  date: Jun 2027
+  status: next
+- id: flight
+  order: 9
+  title: Flight campaign
+  date: Jul 2027 (tentative)
+  status: next
+- id: results
+  order: 10
+  title: Post-flight analysis
+  date: Aug 2027
+  status: next

@@ -1,0 +1,191 @@
+# STAMPEDE admin (Sveltia CMS) configuration.
+# Every collection below edits a file the site is built from. See EDITING.md for how to use /admin.
+
+backend:
+  name: github
+  # TODO: set to the GitHub repository that holds this project, e.g. your-username/stampede-website,
+  # to edit from the live site. Editing on localhost ("Work with Local Repository") does not need it.
+  repo: OWNER/stampede-website
+  branch: main
+
+site_url: https://stampede-ucalgary.netlify.app
+display_url: https://stampede-ucalgary.netlify.app
+logo_url: /brand/favicon.svg
+
+# Uploaded photos, logos and PDFs go here and are served from /uploads/...
+media_folder: public/uploads
+public_folder: /uploads
+
+output:
+  omit_empty_optional_fields: true
+
+collections:
+  # ---------------------------------------------------------------- Dev log
+  - name: log
+    label: Update posts
+    label_singular: Update post
+    description: Dev-log posts shown on the Progress page. Untick "Draft" to publish.
+    folder: src/content/log
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} ({{date}})"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+      - { name: author, label: Author, widget: string }
+      - name: tags
+        label: Tags
+        widget: select
+        multiple: true
+        required: false
+        options: [Software, Mechanical, Electrical, Testing, Outreach, Team]
+      - { name: summary, label: Summary, widget: text, required: false, hint: "One or two sentences shown on the Progress page." }
+      - { name: cover, label: Cover photo, widget: image, required: false }
+      - { name: coverAlt, label: Cover photo description, widget: string, required: false, hint: "Describe the photo for screen readers. Required if there is a cover photo." }
+      - { name: draft, label: Draft (hidden from the site), widget: boolean, default: false, required: false }
+      - { name: body, label: Post, widget: markdown, hint: "Use real numbers with SI units." }
+
+  # ---------------------------------------------------------------- Single-file collections
+  - name: site
+    label: Site content
+    files:
+      # ---------------- Team
+      - name: team
+        label: Team members
+        file: src/content/team.yaml
+        format: yaml
+        fields:
+          - name: members
+            label: Members
+            label_singular: Member
+            widget: list
+            root: true
+            summary: "{{fields.order}}. {{fields.name}} · {{fields.role}}"
+            fields:
+              - { name: id, label: ID, widget: string, pattern: ["^[a-z0-9-]+$", "Lowercase letters, numbers and hyphens only, e.g. jane-doe"], hint: "Unique short name, e.g. jane-doe. Don't change it once set." }
+              - { name: order, label: Position, widget: number, value_type: int, min: 1, hint: "1 = first card." }
+              - { name: name, label: Name, widget: string, required: false }
+              - { name: role, label: Role, widget: string, required: false }
+              - { name: discipline, label: Discipline and year, widget: string, required: false, hint: "e.g. Mechanical Engineering, 2nd year · Aerospace minor" }
+              - { name: bio, label: One-line bio, widget: text, required: false }
+              - { name: linkedin, label: LinkedIn URL, widget: string, required: false, hint: "Shown as the LinkedIn icon." }
+              - { name: photo, label: Photo, widget: image, required: false, hint: "Square, at least 400 px." }
+              - name: group
+                label: Area
+                widget: select
+                options: [Leadership, Software & Controls, Mechanical, Electrical, Advisor]
+                hint: "Not shown on the Team page. Advisors are left off the home page."
+
+      # ---------------- Timeline
+      - name: timeline
+        label: Timeline
+        file: src/content/timeline.yaml
+        format: yaml
+        fields:
+          - name: milestones
+            label: Milestones
+            label_singular: Milestone
+            widget: list
+            root: true
+            summary: "{{fields.order}}. {{fields.title}} · {{fields.date}} · {{fields.status}}"
+            fields:
+              - { name: id, label: ID, widget: string, pattern: ["^[a-z0-9-]+$", "Lowercase letters, numbers and hyphens only"], hint: "Unique short name, e.g. cdr." }
+              - { name: order, label: Position, widget: number, value_type: int, min: 1 }
+              - { name: title, label: Title, widget: string }
+              - { name: date, label: Date, widget: string, required: false, hint: "Free text, e.g. Feb 2027 or May 23–26, 2027." }
+              - name: status
+                label: Status
+                widget: select
+                options: [done, now, next]
+                hint: "Exactly one milestone should be 'now'. The home page shows it as the current phase."
+
+      # ---------------- Events
+      - name: events
+        label: Talks & events
+        file: src/content/events.yaml
+        format: yaml
+        fields:
+          - name: events
+            label: Events
+            label_singular: Event
+            widget: list
+            root: true
+            summary: "{{fields.order}}. {{fields.title}} · {{fields.date}}"
+            fields:
+              - { name: id, label: ID, widget: string, pattern: ["^[a-z0-9-]+$", "Lowercase letters, numbers and hyphens only"] }
+              - { name: order, label: Position, widget: number, value_type: int, min: 1 }
+              - { name: title, label: Title, widget: string }
+              - name: kind
+                label: Kind
+                widget: select
+                options: [Talk, Event, School visit, Media]
+                hint: "Media items appear under Media mentions."
+              - { name: place, label: Place, widget: string, required: false }
+              - { name: date, label: Date, widget: string, required: false }
+              - { name: url, label: Link, widget: string, required: false }
+
+      # ---------------- Partners
+      - name: partners
+        label: Partners
+        file: src/content/partners.yaml
+        format: yaml
+        fields:
+          - name: partners
+            label: Partners
+            label_singular: Partner
+            widget: list
+            root: true
+            summary: "{{fields.order}}. {{fields.name}} · {{fields.tier}}"
+            fields:
+              - { name: id, label: ID, widget: string, pattern: ["^[a-z0-9-]+$", "Lowercase letters, numbers and hyphens only"] }
+              - { name: order, label: Position, widget: number, value_type: int, min: 1 }
+              - { name: name, label: Name, widget: string }
+              - { name: tier, label: Tier, widget: select, options: [Program, Funding, Industry, Academic] }
+              - { name: support, label: What they support, widget: string, required: false }
+              - { name: url, label: Website, widget: string, required: false }
+              - { name: logo, label: Logo, widget: image, required: false, hint: "Only add a logo once the partner has given WRITTEN permission." }
+
+      # ---------------- Gallery
+      - name: gallery
+        label: Photo gallery
+        file: src/content/gallery.json
+        format: json
+        fields:
+          - name: photos
+            label: Photos
+            label_singular: Photo
+            widget: list
+            root: true
+            summary: "{{fields.alt}}"
+            fields:
+              - { name: src, label: Photo, widget: image }
+              - { name: alt, label: Description (for screen readers), widget: string }
+              - { name: caption, label: Caption, widget: string, required: false }
+              - { name: telemetry, label: Telemetry line, widget: string, required: false, hint: "Real values only, e.g. T+00:22 · 0.01 g" }
+              - { name: width, label: Width (px), widget: number, value_type: int, required: false }
+              - { name: height, label: Height (px), widget: number, value_type: int, required: false }
+
+      # ---------------- Site settings
+      - name: settings
+        label: Site settings
+        file: src/content/settings.json
+        format: json
+        fields:
+          - { name: tagline, label: Tagline, widget: string, required: false, hint: "Bold line in the home page hero. Leave empty to hide it." }
+          - { name: mission, label: Mission line, widget: string }
+          - { name: description, label: Site description, widget: text, hint: "Used by search engines and link previews." }
+          - { name: teamEmail, label: Team email, widget: string, required: false }
+          - name: socials
+            label: Social links
+            label_singular: Social link
+            widget: list
+            required: false
+            summary: "{{fields.label}}"
+            fields:
+              - { name: label, label: Name, widget: string, hint: "e.g. Instagram" }
+              - { name: href, label: URL, widget: string }
+          - { name: formEndpoint, label: Contact form endpoint, widget: string, required: false, hint: "POST URL from your form service (e.g. Formspree). Empty = the form doesn't send yet." }
+          - { name: sponsorshipPdf, label: Sponsorship package (PDF), widget: file, required: false }

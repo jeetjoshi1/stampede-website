@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1384" height="480" viewBox="0 0 1384 480" role="img" aria-label="TEAM STAMPEDE — CAN-RGX X · UCALGARY — Spacecraft Tensor And Mass Property Estimation During Excitation">
+<title>STAMPEDE horizontal lockup</title>
+<style>@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,500;125,600;125,700;125,800&amp;display=swap");</style>
+<rect width="1384" height="480" fill="#FFFFFF"/>
+<svg x="60" y="40" width="400" height="400" viewBox="0 0 800 800">
+<defs>
+<clipPath id="bowClip"><path d="M309,504 L309,321.5 Q326,313 343,322 L343,504Z"></path></clipPath>
+<clipPath id="scenem"><circle cx="400" cy="400" r="290"></circle></clipPath>
+<path id="arctopm" d="M74,400 A326,326 0 0 1 726,400"></path>
+<path id="arcbotm" d="M44,400 A356,356 0 0 0 756,400"></path>
+</defs>
+<circle cx="400" cy="400" r="397" fill="#F7F1E6"></circle>
+<circle cx="400" cy="400" r="391" fill="#C9A13B"></circle>
+<circle cx="400" cy="400" r="386" fill="#A6192E"></circle>
+<circle cx="400" cy="400" r="374" fill="none" stroke="#E9C46A" stroke-width="1.2" opacity="0.7"></circle>
+<circle cx="400" cy="400" r="312" fill="none" stroke="#E9C46A" stroke-width="1.2" opacity="0.7"></circle>
+<text font-family="Archivo, sans-serif" font-stretch="125%" style="font-stretch: 125%" font-weight="800" font-size="48" letter-spacing="26" fill="#F7F1E6"><textPath href="#arctopm" startOffset="51.3%" text-anchor="middle">TEAM STAMPEDE</textPath></text>
+<text font-family="Archivo, sans-serif" font-stretch="125%" style="font-stretch: 125%" font-weight="700" font-size="33" letter-spacing="19" fill="#F7F1E6"><textPath href="#arcbotm" startOffset="50.8%" text-anchor="middle">CAN-RGX <tspan fill="#E9C46A">X</tspan> · UCALGARY</textPath></text>
+<g fill="#E9C46A"><path transform="translate(60,402) scale(1.7)" d="M0,-8 L1.6,-1.6 L8,0 L1.6,1.6 L0,8 L-1.6,1.6 L-8,0 L-1.6,-1.6Z"></path><path transform="translate(740,402) scale(1.7)" d="M0,-8 L1.6,-1.6 L8,0 L1.6,1.6 L0,8 L-1.6,1.6 L-8,0 L-1.6,-1.6Z"></path></g>
+<circle cx="400" cy="400" r="302" fill="#F7F1E6"></circle>
+<circle cx="400" cy="400" r="297" fill="#C9A13B"></circle>
+<g clip-path="url(#scenem)">
+<rect x="100" y="100" width="600" height="600" fill="#F7F1E6"></rect>
+<g stroke="#C9A13B" fill="none" stroke-linecap="round"><circle cx="400" cy="470" r="128" stroke-width="12"></circle><circle cx="400" cy="470" r="108" stroke-width="2.5"></circle><g stroke-width="6">
+<line x1="400.0" y1="446.0" x2="400.0" y2="362.0"></line>
+<line x1="420.8" y1="458.0" x2="493.5" y2="416.0"></line>
+<line x1="420.8" y1="482.0" x2="493.5" y2="524.0"></line>
+<line x1="400.0" y1="494.0" x2="400.0" y2="578.0"></line>
+<line x1="379.2" y1="482.0" x2="306.5" y2="524.0"></line>
+<line x1="379.2" y1="458.0" x2="306.5" y2="416.0"></line>
+</g></g><circle cx="400" cy="470" r="20" fill="#C9A13B"></circle><circle cx="400" cy="470" r="7" fill="#F7F1E6"></circle>
+<path d="M100,520 L100,462 L124,440 L144,450 L170,412 L190,430 L212,404 L234,428 L256,418 L280,444 L306,410 L330,432 L352,422 L380,446 L410,416 L436,438 L462,410 L486,426 L512,402 L536,430 L560,416 L582,434 L610,406 L632,424 L654,412 L678,436 L700,420 L700,520Z" fill="#EED8D0"></path>
+<path d="M100,520 L100,486 L132,464 L156,476 L186,448 L212,470 L240,456 L268,478 L300,460 L330,482 L370,474 L410,484 L450,470 L486,480 L520,458 L548,474 L578,452 L610,476 L640,450 L668,468 L700,456 L700,520Z" fill="#DDB2A9"></path>
+<g fill="#F7F1E6"><path d="M170,412 L160.9,425.3 L166.4,423.6 L170,419 L172.5,420.1 L177.0,418.3Z"></path><path d="M212,404 L204.3,413.1 L209.2,413.6 L212,411 L214.8,413.2 L219.7,412.4Z"></path><path d="M306,410 L296.9,421.9 L302.4,420.9 L306,417 L309.2,418.9 L314.4,417.7Z"></path><path d="M410,416 L399.5,426.5 L405.8,426.2 L410,423 L413.6,424.9 L419.1,423.7Z"></path><path d="M462,410 L452.9,419.8 L458.4,419.9 L462,417 L465.2,417.8 L470.4,415.6Z"></path><path d="M512,402 L502.9,410.4 L508.4,411.2 L512,409 L515.2,411.9 L520.4,411.8Z"></path><path d="M560,416 L551.6,420.9 L556.8,423.4 L560,423 L562.9,424.1 L567.7,422.3Z"></path><path d="M610,406 L600.2,415.8 L606.1,415.9 L610,413 L612.9,414.1 L617.7,412.3Z"></path><path d="M654,412 L646.3,416.2 L651.1,419.1 L654,419 L657.2,421.2 L662.4,420.4Z"></path></g>
+<path d="M100,462 L124,440 L144,450 L170,412 L190,430 L212,404 L234,428 L256,418 L280,444 L306,410 L330,432 L352,422 L380,446 L410,416 L436,438 L462,410 L486,426 L512,402 L536,430 L560,416 L582,434 L610,406 L632,424 L654,412 L678,436 L700,420" fill="none" stroke="#C99A91" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"></path>
+<path d="M100,486 L132,464 L156,476 L186,448 L212,470 L240,456 L268,478 L300,460 L330,482 L370,474 L410,484 L450,470 L486,480 L520,458 L548,474 L578,452 L610,476 L640,450 L668,468 L700,456" fill="none" stroke="#B98178" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"></path>
+<g fill="#C9A13B"><path transform="translate(470,190) scale(1.0)" d="M0,-8 L1.6,-1.6 L8,0 L1.6,1.6 L0,8 L-1.6,1.6 L-8,0 L-1.6,-1.6Z"></path><path transform="translate(560,250) scale(0.7)" d="M0,-8 L1.6,-1.6 L8,0 L1.6,1.6 L0,8 L-1.6,1.6 L-8,0 L-1.6,-1.6Z"></path><path transform="translate(180,330) scale(0.6)" d="M0,-8 L1.6,-1.6 L8,0 L1.6,1.6 L0,8 L-1.6,1.6 L-8,0 L-1.6,-1.6Z"></path><path transform="translate(620,330) scale(0.8)" d="M0,-8 L1.6,-1.6 L8,0 L1.6,1.6 L0,8 L-1.6,1.6 L-8,0 L-1.6,-1.6Z"></path><path transform="translate(520,150) scale(0.55)" d="M0,-8 L1.6,-1.6 L8,0 L1.6,1.6 L0,8 L-1.6,1.6 L-8,0 L-1.6,-1.6Z"></path></g>
+<g transform="translate(288,228) rotate(-25) scale(1.15)">
+<line x1="-24" y1="0" x2="24" y2="0" stroke="#6E0F1D" stroke-width="4"></line>
+<rect x="-78" y="-14" width="56" height="28" rx="2" fill="#A6192E" stroke="#6E0F1D" stroke-width="2.5"></rect>
+<rect x="22" y="-14" width="56" height="28" rx="2" fill="#A6192E" stroke="#6E0F1D" stroke-width="2.5"></rect>
+<g stroke="#F7F1E6" stroke-width="1.4" opacity="0.85"><line x1="-64" y1="-14" x2="-64" y2="14"></line><line x1="-50" y1="-14" x2="-50" y2="14"></line><line x1="-36" y1="-14" x2="-36" y2="14"></line><line x1="36" y1="-14" x2="36" y2="14"></line><line x1="50" y1="-14" x2="50" y2="14"></line><line x1="64" y1="-14" x2="64" y2="14"></line><line x1="-78" y1="0" x2="-22" y2="0"></line><line x1="22" y1="0" x2="78" y2="0"></line></g>
+<rect x="-14" y="-17" width="28" height="34" rx="3" fill="#6E0F1D"></rect>
+<rect x="-14" y="-3" width="28" height="6" fill="#C9A13B"></rect>
+<line x1="0" y1="-17" x2="0" y2="-30" stroke="#6E0F1D" stroke-width="3"></line>
+<path d="M-11,-29 Q0,-42 11,-29Z" fill="#C9A13B" stroke="#6E0F1D" stroke-width="2"></path>
+<line x1="0" y1="17" x2="0" y2="25" stroke="#6E0F1D" stroke-width="3"></line>
+</g>
+<path d="M140,522 L140,507 L147,504 L154,507 L154,498 L175,498 L175,506 L194,506 L194,497 L202,494 L211,497 L211,500 L226,500 L226,508 L248,508 L248,499 L258,496 L268,499 L268,502 L286,502 L286,492 L302,492 L302,509 L309,506 L316,509 L316,498 L337,498 L337,504 L356,504 L356,497 L364,494 L373,497 L373,500 L388,500 L388,496 L410,496 L410,509 L420,506 L430,509 L430,490 L448,490 L448,502 L464,502 L464,501 L471,498 L478,501 L478,504 L499,504 L499,494 L518,494 L518,511 L526,508 L535,511 L535,500 L550,500 L550,496 L572,496 L572,507 L582,504 L592,507 L592,498 L610,498 L610,506 L626,506 L626,495 L633,492 L640,495 L640,502 L661,502 L661,522Z M150,522 L150,494 L159,488 L168,494 L168,522Z M170,522 L170,488 L184,482 L184,522Z M186,522 L186,454 L189,450 L189,444 L199,444 L199,450 L202,454 L202,522Z M193.4,444 L194.6,444 L194.2,432 L193.8,432Z M206,522 L206,462 L214,450 L222,462 L222,522Z M226,522 L226,482 L234,482 L234,476 L254,476 L254,482 L262,482 L262,522Z M264,522 L264,440 L272,440 L272,432 L286,432 L286,426 L292,426 L292,432 L296,437 L296,522Z M300,522 L300,322 Q326,308 352,326 L352,522Z M364,522 L368,372 L376,372 L380,522Z M362,372 L382,372 L388,366 L356,366Z M355,354 L389,354 L389,366 L355,366Z M358,354 L386,354 L382,347 L362,347Z M369,347 L375,347 L373,337 L371,337Z M371.3,337 L372.7,337 L372.4,324 L371.6,324Z M392,522 L392,344 L398,338 L398,330 L410,330 L414,336 L414,522Z M403.4,330 L404.6,330 L404.2,318 L403.8,318Z M417,522 L417,362 L421,362 L428,346 L435,362 L440,362 L440,522Z M444,522 L444,346 L470,322 L470,522Z M469,322 L470.4,322 L470,310 L469.6,310Z M474,522 L474,386 L480,378 L490,378 L496,386 L496,522Z" fill="#6E0F1D"></path>
+<g aria-hidden="true">
+<path d="M518.5,522 L509,470.8 L500,470.8 L500,463.6 Q500,458 507,458 C533,459.6 552,467.6 570,467.6 C588,467.6 607,459.6 633,458 Q640,458 640,463.6 L640,470.8 L633,470.8 L623,522Z" fill="#6E0F1D"></path>
+<path d="M505,522 L505,505 Q505,499 511,499 Q517,499 517,505 L517,522Z" fill="#6E0F1D"></path>
+<path d="M624,522 L624,505 Q624,499 630,499 Q636,499 636,505 L636,522Z" fill="#6E0F1D"></path>
+<path d="M643,522 L643,446 L650,446 L650,437 L658,437 L658,430 L662,430 L662,437 L669,437 L669,446 L676,446 L676,522Z" fill="#6E0F1D"></path>
+</g>
+<g aria-hidden="true" fill="none" stroke="#F7F1E6" stroke-linecap="round">
+<line x1="357.5" y1="359.5" x2="386.5" y2="359.5" stroke-width="2.4" stroke-dasharray="3 1.6" stroke-linecap="butt"></line>
+<line x1="372" y1="343" x2="372" y2="349" stroke-width="1.6"></line>
+<path d="M504,463.5 C533,465 552,472 570,472 C588,472 607,465 636,463.5" stroke-width="1.8"></path>
+<line x1="522" y1="494" x2="619" y2="494" stroke-width="2.6" stroke-dasharray="11 3" stroke-linecap="butt"></line>
+<line x1="524" y1="504" x2="617" y2="504" stroke-width="2" stroke-dasharray="11 3" stroke-linecap="butt" opacity="0.7"></line>
+<path d="M309,250.0 L343,175.0 M309,175.0 L343,250.0 M309,275.0 L343,200.0 M309,200.0 L343,275.0 M309,300.0 L343,225.0 M309,225.0 L343,300.0 M309,325.0 L343,250.0 M309,250.0 L343,325.0 M309,350.0 L343,275.0 M309,275.0 L343,350.0 M309,375.0 L343,300.0 M309,300.0 L343,375.0 M309,400.0 L343,325.0 M309,325.0 L343,400.0 M309,425.0 L343,350.0 M309,350.0 L343,425.0 M309,450.0 L343,375.0 M309,375.0 L343,450.0 M309,475.0 L343,400.0 M309,400.0 L343,475.0 M309,500.0 L343,425.0 M309,425.0 L343,500.0 M309,525.0 L343,450.0 M309,450.0 L343,525.0 M309,550.0 L343,475.0 M309,475.0 L343,550.0 M309,575.0 L343,500.0 M309,500.0 L343,575.0 M309,600.0 L343,525.0 M309,525.0 L343,600.0" stroke-width="1" opacity="0.65" stroke-linecap="butt" clip-path="url(#bowClip)"></path>
+<path d="M309,321.5 L309,504 M343,322 L343,504" stroke-width="1.2" opacity="0.75"></path>
+<path d="M304.5,321 L304.5,504 M347.5,324 L347.5,504" stroke-width="0.8" opacity="0.35"></path>
+</g>
+<rect x="100" y="520" width="600" height="190" fill="#6E0F1D"></rect>
+<g fill="none" stroke="#F7F1E6" stroke-linecap="round"><path d="M150,552 Q275,544 400,552 T650,552" stroke-width="6"></path><path d="M100,574 Q250,568 400,574 T700,574" stroke-width="5" opacity="0.75"></path><path d="M100,594 Q250,587 400,594 T700,594" stroke-width="4" opacity="0.5"></path></g>
+
+</g>
+<circle cx="400" cy="400" r="291" fill="none" stroke="#F7F1E6" stroke-width="3"></circle>
+</svg>
+<g font-family="Archivo, sans-serif">
+<rect x="524" y="134" width="40" height="4" fill="#C9A13B"/>
+<text x="580" y="146" font-stretch="125%" style="font-stretch:125%" font-weight="700" font-size="22" letter-spacing="9" fill="#A6192E">TEAM</text>
+<text x="524" y="268" font-stretch="125%" style="font-stretch:125%" font-weight="800" font-size="124" textLength="800" lengthAdjust="spacingAndGlyphs" fill="#A6192E">STAMPEDE</text>
+<rect x="524" y="294" width="120" height="5" fill="#C9A13B"/>
+<text x="524" y="348" font-stretch="125%" style="font-stretch:125%" font-weight="700" font-size="32" letter-spacing="6" fill="#6E0F1D">CAN-RGX <tspan fill="#C9A13B">X</tspan> · UCALGARY</text>
+<text x="524" y="388" font-weight="500" font-size="21" textLength="800" lengthAdjust="spacing" fill="#4A5560">Spacecraft Tensor And Mass Property Estimation During Excitation</text>
+</g>
+</svg>

@@ -1,0 +1,152 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Todo from "../components/Todo.astro";
+import Icon from "../components/Icon.astro";
+import Patch from "../components/Patch.astro";
+import { SITE } from "../lib/site";
+
+const events = (await getCollection("events")).sort((a, b) => a.data.order - b.data.order);
+const talks = events.filter((e) => e.data.kind !== "Media");
+const media = events.filter((e) => e.data.kind === "Media");
+const gallery = await getCollection("gallery");
+const boilerplate =
+  "STAMPEDE (Spacecraft Tensor And Mass Property Estimation During Excitation) is a student team from the University of Calgary's Schulich School of Engineering, selected for CAN-RGX X, the Canadian Reduced Gravity Experiment design challenge, with its flight campaign planned for 2027. A test article rotates freely on a three-axis gimbal while four reaction wheels excite it during the microgravity phases of a parabolic flight on the NRC Falcon 20; from the measured wheel speeds and body rates, the flight computer estimates its full inertia tensor in real time using recursive least squares, with an extended Kalman filter running alongside. The work supports in-orbit estimation of spacecraft mass properties for better attitude control.";
+---
+<BaseLayout title="Outreach" description="STAMPEDE talks, events, media mentions, photos and press kit.">
+  <section class="section" aria-labelledby="page-title">
+    <div class="container">
+      <Eyebrow>Outreach &amp; media</Eyebrow>
+      <h1 id="page-title">Outreach</h1>
+      <p class="lede intro">Talks, events and school visits, plus everything a journalist or organiser needs to write about us.</p>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="events-title">
+    <div class="container split">
+      <div data-reveal>
+        <h2 id="events-title">Talks &amp; events</h2>
+        <ul class="event-list">
+          {talks.map((e) => (
+            <li class="event">
+              <span class="pill">{e.data.kind}</span>
+              <div>
+                <h3 class="event-title">{e.data.url ? <a href={e.data.url} rel="noopener">{e.data.title}</a> : e.data.title}</h3>
+                <p class="event-meta">
+                  <span><Icon name="map-pin" size={18} /> {e.data.place ?? <Todo text="where" />}</span>
+                  <span><Icon name="calendar" size={18} /> {e.data.date ?? <Todo text="date" />}</span>
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div data-reveal>
+        <h2>Media mentions</h2>
+        {media.length ? (
+          <ul class="event-list">
+            {media.map((m) => (<li class="event"><h3 class="event-title">{m.data.url ? <a href={m.data.url} rel="noopener">{m.data.title}</a> : m.data.title}</h3></li>))}
+          </ul>
+        ) : (
+          <p class="media-empty">None yet. <Todo text="media mentions" /></p>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="gallery-title">
+    <div class="container">
+      <div class="section-head"><h2 id="gallery-title">Photos</h2></div>
+      {gallery.length ? (
+        <ul class="masonry">
+          {gallery.map((g) => (
+            <li>
+              <button type="button" class="shot" data-full={g.data.src} data-alt={g.data.alt} data-caption={g.data.caption ?? ""}>
+                <img src={g.data.src} alt={g.data.alt} width={g.data.width} height={g.data.height} loading="lazy" decoding="async" />
+                {g.data.telemetry && <span class="telemetry shot-tel">{g.data.telemetry}</span>}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p><Todo text="photo gallery: real team, hardware and Calgary photos (AVIF/WebP, alt text required)" block /></p>
+      )}
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="press-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>Press kit</Eyebrow>
+        <h2 id="press-title">Press kit</h2>
+      </div>
+      <div class="press" data-reveal>
+        <div class="card press-assets">
+          <Patch size="160px" decorative id="press" />
+          <ul class="downloads">
+            <li><a href="/brand/stampede-patch.png" download><Icon name="download" size={20} /> Mission patch, PNG 1600 × 1600</a></li>
+            <li><a href="/brand/stampede-patch-outlined.svg" download="stampede-patch.svg"><Icon name="download" size={20} /> Mission patch, SVG</a></li>
+            <li><a href="/brand/stampede-lockup-outlined.svg" download="stampede-lockup.svg"><Icon name="download" size={20} /> Horizontal lockup, SVG</a></li>
+          </ul>
+          <p class="small">Please don't recolour, stretch, rotate or crop the patch, and keep clear space of a quarter of its width around it.</p>
+        </div>
+        <div>
+          <h3>Boilerplate</h3>
+          <p class="boilerplate">{boilerplate}</p>
+          <h3 class="contact-h">Media contact</h3>
+          <p>Jeet Joshi, Team Lead<br />{SITE.teamEmail ? <a href={`mailto:${SITE.teamEmail}`}>{SITE.teamEmail}</a> : <Todo text="team-lead contact email" />}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="lightbox scope-night" data-lightbox aria-label="Photo viewer">
+    <button type="button" class="icon-close" data-lightbox-close aria-label="Close photo"><Icon name="x" /></button>
+    <figure><img alt="" data-lightbox-img /><figcaption data-lightbox-cap class="small"></figcaption></figure>
+  </dialog>
+</BaseLayout>
+
+<script>
+  const box = document.querySelector<HTMLDialogElement>("[data-lightbox]");
+  const img = document.querySelector<HTMLImageElement>("[data-lightbox-img]");
+  const cap = document.querySelector<HTMLElement>("[data-lightbox-cap]");
+  document.querySelectorAll<HTMLButtonElement>(".shot").forEach((b) =>
+    b.addEventListener("click", () => {
+      if (!box || !img || !cap) return;
+      img.src = b.dataset.full ?? ""; img.alt = b.dataset.alt ?? ""; cap.textContent = b.dataset.caption ?? "";
+      box.showModal();
+    })
+  );
+  document.querySelector("[data-lightbox-close]")?.addEventListener("click", () => box?.close());
+  box?.addEventListener("click", (e) => { if (e.target === box) box.close(); });
+</script>
+
+<style>
+  .intro { margin-top: 24px; }
+  .event-list { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 20px; }
+  .event { display: grid; gap: 8px; justify-items: start; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .event-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 6px 0 0; color: var(--text-muted); font-size: 15px; }
+  .event-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .media-empty { margin-top: 24px; }
+  .masonry { list-style: none; padding: 0; margin: 0; columns: 1; column-gap: 16px; }
+  @media (min-width: 640px) { .masonry { columns: 2; } }
+  @media (min-width: 960px) { .masonry { columns: 3; } }
+  .masonry li { break-inside: avoid; margin-bottom: 16px; }
+  .shot { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: var(--radius-md); overflow: hidden; }
+  .shot-tel { position: absolute; left: 12px; bottom: 12px; background: var(--night); color: var(--snow); padding: 2px 8px; border-radius: 4px; }
+  .press { display: grid; gap: 32px; }
+  @media (min-width: 960px) { .press { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; } }
+  .press-assets { display: grid; gap: 20px; justify-items: start; }
+  .press-assets :global(.patch) { margin: 40px; }
+  .downloads { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+  .downloads a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+  .boilerplate { margin-top: 12px; }
+  .contact-h { margin-top: 32px; margin-bottom: 8px; }
+  .lightbox { max-width: min(1100px, 92vw); padding: 48px 16px 16px; border: 0; border-radius: var(--radius-md); }
+  .lightbox::backdrop { background: rgba(14, 23, 38, 0.85); }
+  .lightbox img { max-height: 78vh; width: auto; margin: 0 auto; border-radius: var(--radius-sm); }
+  .lightbox figure { margin: 0; }
+  .lightbox figcaption { margin-top: 12px; text-align: center; }
+  .icon-close { position: absolute; top: 4px; right: 4px; width: 44px; height: 44px; display: grid; place-items: center; background: none; border: 0; color: var(--text); cursor: pointer; }
+</style>

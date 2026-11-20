@@ -1,0 +1,24 @@
+---
+// Thin gold dotted orbit arc, 100% wide, 40 px tall; draws itself when scrolled into view (branding.md §10, §12).
+interface Props { id: string; class?: string }
+const { id, class: cls } = Astro.props;
+---
+<div class:list={["orbit-divider", cls]} data-orbit aria-hidden="true">
+  <svg viewBox="0 0 1000 40" preserveAspectRatio="none" focusable="false">
+    <defs>
+      <mask id={`orbit-mask-${id}`} maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="40">
+        <path class="orbit-draw" d="M2,36 Q500,-28 998,36" pathLength="1" />
+      </mask>
+    </defs>
+    <path class="orbit-dots" d="M2,36 Q500,-28 998,36" mask={`url(#orbit-mask-${id})`} />
+  </svg>
+</div>
+<style>
+  .orbit-divider { width: 100%; height: 40px; }
+  .orbit-divider svg { width: 100%; height: 40px; overflow: visible; }
+  .orbit-dots { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0.1 8; vector-effect: non-scaling-stroke; }
+  .orbit-draw { fill: none; stroke: white; stroke-width: 12; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  :global(html.js) .orbit-draw { stroke-dashoffset: 1; transition: stroke-dashoffset 1200ms var(--ease); }
+  :global(html.js) .orbit-divider.is-visible .orbit-draw { stroke-dashoffset: 0; }
+  @media (prefers-reduced-motion: reduce) { :global(html.js) .orbit-draw { stroke-dashoffset: 0; transition: none; } }
+</style>

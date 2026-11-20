@@ -1,0 +1,18 @@
+---
+// STAMPEDE admin (Sveltia CMS). It edits the files in src/content and public/uploads.
+// Its settings live in public/admin/config.yml. See EDITING.md for how to use it.
+---
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>STAMPEDE admin</title>
+    <link rel="icon" href="/brand/favicon.svg" type="image/svg+xml" />
+    <link href="/admin/config.yml" type="application/yaml" rel="cms-config-url" />
+  </head>
+  <body>
+    <script is:inline src="https://unpkg.com/@sveltia/cms@0.260.0/dist/sveltia-cms.js"></script>
+  </body>
+</html>

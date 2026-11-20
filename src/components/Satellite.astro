@@ -1,0 +1,20 @@
+---
+// The patch's satellite (branding.md §7.1), redrawn with brand tokens.
+interface Props { size?: number; class?: string }
+const { size = 64, class: cls } = Astro.props;
+---
+<svg class:list={["satellite", cls]} width={size} height={size * 0.55} viewBox="-82 -45 164 90" aria-hidden="true">
+  <line x1="-24" y1="0" x2="24" y2="0" stroke="var(--maroon)" stroke-width="4" />
+  <rect x="-78" y="-14" width="56" height="28" rx="2" fill="var(--calgary-red)" stroke="var(--maroon)" stroke-width="2.5" />
+  <rect x="22" y="-14" width="56" height="28" rx="2" fill="var(--calgary-red)" stroke="var(--maroon)" stroke-width="2.5" />
+  <g stroke="var(--cream)" stroke-width="1.4" opacity="0.85">
+    <line x1="-64" y1="-14" x2="-64" y2="14" /><line x1="-50" y1="-14" x2="-50" y2="14" /><line x1="-36" y1="-14" x2="-36" y2="14" />
+    <line x1="36" y1="-14" x2="36" y2="14" /><line x1="50" y1="-14" x2="50" y2="14" /><line x1="64" y1="-14" x2="64" y2="14" />
+    <line x1="-78" y1="0" x2="-22" y2="0" /><line x1="22" y1="0" x2="78" y2="0" />
+  </g>
+  <rect x="-14" y="-17" width="28" height="34" rx="3" fill="var(--maroon)" />
+  <rect x="-14" y="-3" width="28" height="6" fill="var(--gold)" />
+  <line x1="0" y1="-17" x2="0" y2="-30" stroke="var(--maroon)" stroke-width="3" />
+  <path d="M-11,-29 Q0,-42 11,-29Z" fill="var(--gold)" stroke="var(--maroon)" stroke-width="2" />
+  <line x1="0" y1="17" x2="0" y2="25" stroke="var(--maroon)" stroke-width="3" />
+</svg>

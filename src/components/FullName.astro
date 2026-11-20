@@ -1,0 +1,13 @@
+---
+// The full name. `acronym` adds the S-T-A-M-P-E-D-E treatment (hero and About only, branding.md §1.1).
+interface Props { acronym?: boolean; class?: string }
+const { acronym = false, class: cls } = Astro.props;
+const words = ["Spacecraft", "Tensor", "And", "Mass", "Property", "Estimation", "During", "Excitation"];
+---
+{acronym ? (
+  <p class:list={["fullname", cls]}>
+    {words.map((w, i) => (<Fragment><b>{w[0]}</b>{w.slice(1)}{i < words.length - 1 ? " " : ""}</Fragment>))}
+  </p>
+) : (
+  <p class:list={["fullname-plain", cls]}>Spacecraft Tensor And Mass Property Estimation During Excitation</p>
+)}

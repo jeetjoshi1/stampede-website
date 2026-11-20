@@ -1,0 +1,249 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Patch from "../components/Patch.astro";
+import Skyline from "../components/Skyline.astro";
+import Satellite from "../components/Satellite.astro";
+import Wheel from "../components/Wheel.astro";
+import FullName from "../components/FullName.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Todo from "../components/Todo.astro";
+import Icon from "../components/Icon.astro";
+import Headshot from "../components/Headshot.astro";
+import OrbitDivider from "../components/OrbitDivider.astro";
+import { SITE } from "../lib/site";
+
+const team = (await getCollection("team")).filter((m) => m.data.group !== "Advisor").sort((a, b) => a.data.order - b.data.order);
+const timeline = (await getCollection("timeline")).sort((a, b) => a.data.order - b.data.order);
+const now = timeline.find((t) => t.data.status === "now");
+const next = timeline.find((t) => t.data.status === "next");
+const partners = (await getCollection("partners")).sort((a, b) => a.data.order - b.data.order);
+const initials = (n: string | null) => (n ? n.split(/\s+/).map((p) => p[0]).join("").slice(0, 2) : undefined);
+
+const steps = [
+  { verb: "Spin", text: "Four reaction wheels run a planned excitation profile, and the test article turns the other way in response.", tag: "4 wheels · 45°" },
+  { verb: "Release", text: "In each microgravity window of a parabolic flight, the gimbal unlocks and the article rotates freely about its pivot.", tag: "12 s · ≈ 0 g" },
+  { verb: "Measure", text: "From measured wheel speeds and body rates, the flight computer estimates the full inertia tensor in real time.", tag: "RLS + EKF · 10 Hz" },
+];
+---
+<BaseLayout>
+  <!-- 1. Hero: always cream, maroon skyline along the bottom (branding.md §4, §9.1) -->
+  <section class="hero scope-cream" aria-labelledby="hero-title">
+    <div class="hero-sat" aria-hidden="true"><Satellite size={72} /></div>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <Eyebrow>CAN-RGX X · University of Calgary</Eyebrow>
+        <h1 id="hero-title">STAMPEDE</h1>
+        <FullName acronym class="hero-fullname" />
+        {SITE.tagline && <p class="hero-tagline">{SITE.tagline}</p>}
+        <p class="hero-mission">{SITE.mission}</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/experiment">See the experiment <Icon name="arrow-right" /></a>
+          <a class="btn btn-outline" href="/partners">Support us</a>
+        </div>
+      </div>
+      <div class="hero-patch">
+        <Patch size="100%" id="hero" class="floaty" />
+      </div>
+    </div>
+    <Skyline id="hero" class="hero-skyline" />
+  </section>
+
+  <!-- 2. The idea in 3 steps -->
+  <section class="section" aria-labelledby="idea-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>The idea</Eyebrow>
+        <h2 id="idea-title">The idea in three steps</h2>
+      </div>
+      <ol class="steps cards cards-3">
+        {steps.map((s, i) => (
+          <li class="card step" data-reveal>
+            <div class="step-num" aria-hidden="true">
+              <Wheel size={64} class="step-wheel" />
+              <span>{i + 1}</span>
+            </div>
+            <h3>{s.verb}</h3>
+            <p>{s.text}</p>
+            <p class="step-tag mono">{s.tag}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <div class="container"><OrbitDivider id="home-1" /></div>
+
+  <!-- 3. Why it matters -->
+  <section class="section" aria-labelledby="why-title">
+    <div class="container split">
+      <div data-reveal>
+        <Eyebrow>Why it matters</Eyebrow>
+        <h2 id="why-title">A spacecraft has to know its own inertia to point.</h2>
+        <p class="why-todo"><Todo text="Jeet to approve copy" /></p>
+      </div>
+      <div class="why-copy" data-reveal>
+        <p>
+          Attitude control is how a spacecraft points its cameras, antennas and solar panels. Every controller that does it
+          relies on a model of the spacecraft's inertia tensor: how its mass is spread out, and so how it will turn when a
+          torque is applied.
+        </p>
+        <p>
+          That tensor is usually calculated from CAD models and ground tests before launch. In orbit it changes as fuel is
+          burned, booms and panels deploy, payloads move or a satellite docks with another. A controller tuned for the wrong
+          inertia wastes energy, settles more slowly, or can become unstable.
+        </p>
+        <p>
+          Estimating inertia in flight, with the actuators a spacecraft already carries, would let the controller keep its
+          model honest. Testing that idea properly needs a body that is free to rotate in every axis, which on Earth means
+          reduced gravity.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Status strip -->
+  <section class="status" aria-labelledby="status-title">
+    <div class="container status-inner" data-reveal>
+      <h2 id="status-title" class="visually-hidden">Project status</h2>
+      <div class="status-item">
+        <span class="status-label">Current phase</span>
+        <span class="pill pill-now">{now?.data.title ?? <Todo text="current phase" />}</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Next milestone</span>
+        <span class="status-value">{next?.data.title ?? <Todo text="next milestone" />}</span>
+        <span class="status-date">{next?.data.date ?? <Todo text="date" />}</span>
+      </div>
+      <a class="btn btn-ghost status-link" href="/progress">Follow our progress <Icon name="arrow-right" size={20} /></a>
+    </div>
+  </section>
+
+  <!-- 5. Team teaser -->
+  <section class="section" aria-labelledby="team-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>The team</Eyebrow>
+        <h2 id="team-title">The people behind the experiment</h2>
+      </div>
+      <ul class="teaser" data-reveal>
+        {team.map((m) => (
+          <li class="member">
+            <Headshot src={m.data.photo} alt={m.data.name ? `Photo of ${m.data.name}` : "Team member photo to come"} size={140} initials={initials(m.data.name)} />
+            <span class="teaser-name">{m.data.name ?? <Todo text="name" />}</span>
+            <span class="small">{m.data.role ?? m.data.group}</span>
+          </li>
+        ))}
+      </ul>
+      <a class="btn btn-outline" href="/team">Meet the team <Icon name="arrow-right" /></a>
+    </div>
+  </section>
+
+  <!-- 6. Partners strip: names only until written permission for logos (branding.md §9.1, §9.5) -->
+  <section class="section section-alt partners-strip" aria-labelledby="partners-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>Support</Eyebrow>
+        <h2 id="partners-title">With thanks to</h2>
+      </div>
+      <ul class="logo-row" data-reveal>
+        {partners.map((p) => (
+          <li class="logo-tile">
+            {p.data.logo ? <img src={p.data.logo} alt={p.data.name} loading="lazy" /> : (
+              <>
+                <span class="logo-name">{p.data.name}</span>
+                <Todo text="logo, pending written permission" />
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7. CTA band -->
+  <section class="band-red section" aria-labelledby="cta-title">
+    <div class="container cta" data-reveal>
+      <h2 id="cta-title">Want to support a Calgary team in zero-g?</h2>
+      <a class="btn btn-on-red" href="/contact">Get in touch <Icon name="arrow-right" /></a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero { position: relative; overflow: hidden; padding-top: 48px; }
+  .hero-grid { position: relative; z-index: 1; display: grid; gap: 40px; align-items: center; padding-bottom: 24px; }
+  .hero-copy h1 { margin-top: 4px; }
+  .hero-mission { margin: 20px 0 0; font-size: 18px; color: var(--text); }
+  .hero-tagline { margin: 24px 0 0; font: 700 20px/1.3 var(--font-body); color: var(--heading); }
+  .hero-tagline + .hero-mission { margin-top: 8px; }
+  .hero .btn-row { margin-top: 32px; }
+  .hero-patch { justify-self: center; width: min(78vw, 340px); }
+  .hero-skyline { position: relative; z-index: 1; margin-top: 8px; }
+  .hero-sat { position: absolute; top: 20px; left: 0; z-index: 0; opacity: 0.9; animation: drift 70s linear infinite; }
+  @keyframes drift {
+    from { transform: translateX(-120px) translateY(0) rotate(-12deg); }
+    50% { transform: translateX(50vw) translateY(18px) rotate(-8deg); }
+    to { transform: translateX(calc(100vw + 40px)) translateY(0) rotate(-12deg); }
+  }
+  .floaty { animation: floaty 6s ease-in-out infinite alternate; }
+  @keyframes floaty { from { transform: translateY(-6px); } to { transform: translateY(6px); } }
+  @media (prefers-reduced-motion: reduce) {
+    .floaty { animation: none; }
+    .hero-sat { display: none; }
+  }
+  @media (min-width: 960px) {
+    .hero { padding-top: 72px; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr) auto; gap: 48px; padding-bottom: 32px; }
+    .hero-patch { width: clamp(400px, 34vw, 440px); margin: 0 0 0 auto; }
+    .hero-mission { font-size: 20px; }
+  }
+  @media (min-width: 1200px) { :global(.hero-fullname) { white-space: nowrap; } }
+
+  /* Steps */
+  .steps { list-style: none; padding: 0; margin: 0; counter-reset: none; }
+  .step-num { position: relative; width: 64px; height: 64px; display: grid; place-items: center; margin-bottom: 20px; }
+  .step-num :global(.step-wheel) { position: absolute; inset: 0; color: var(--accent); }
+  .step-num span {
+    position: relative; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--primary); color: var(--on-primary); font: 700 15px/1 var(--font-display);
+  }
+  .step p { margin-top: 12px; }
+  .step-tag { color: var(--text-muted); margin-top: 16px !important; }
+
+  /* Why */
+  .why-todo { margin-top: 16px; }
+  .why-copy p { max-width: 62ch; }
+
+  /* Status */
+  .status { border-block: 1px solid var(--border); background: var(--surface); }
+  .status-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 40px; padding-block: 24px; }
+  .status-item { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .status-label { font: 600 12px/1.4 var(--font-display); letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); }
+  .status-value { font-weight: 700; }
+  .status-date { font-family: var(--font-mono); font-size: 15px; }
+  .status-link { margin-left: auto; min-height: 44px; }
+
+  /* Team teaser */
+  .teaser { list-style: none; padding: 0; margin: 0 0 40px; display: flex; flex-wrap: wrap; justify-content: center; gap: 32px 24px; }
+  .teaser > li { flex: 0 1 calc((100% - 24px) / 2); }
+  @media (min-width: 960px) { .teaser > li { flex-basis: calc((100% - 4 * 24px) / 5); } }
+  .member { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+  .member :global(.headshot) { margin-bottom: 8px; }
+  .teaser-name { font-weight: 700; }
+
+  /* Partners */
+  .logo-row { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .logo-tile {
+    display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 10px;
+    min-height: 112px; padding: 20px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+  }
+  .logo-tile img { max-height: 56px; width: auto; filter: grayscale(1); transition: filter 150ms var(--ease); }
+  .logo-tile:hover img { filter: none; }
+  .logo-name { font-weight: 700; font-size: 18px; }
+
+  /* CTA */
+  .cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; }
+  .cta h2 { max-width: 22ch; }
+</style>

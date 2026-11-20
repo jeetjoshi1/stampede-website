@@ -1,0 +1,158 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Todo from "../components/Todo.astro";
+import Icon from "../components/Icon.astro";
+import Wheel from "../components/Wheel.astro";
+import { SITE } from "../lib/site";
+const reasons = ["Sponsorship", "Media", "Other"];
+---
+<BaseLayout title="Contact" description="Get in touch with STAMPEDE about sponsorship, media or anything else.">
+  <section class="section" aria-labelledby="page-title">
+    <div class="container contact-grid">
+      <div>
+        <Eyebrow>Contact</Eyebrow>
+        <h1 id="page-title">Contact</h1>
+        <p class="lede intro">Sponsorship, media, or a question about the experiment: send us a note and we'll get back to you.</p>
+        <dl class="direct">
+          <div><dt>Email</dt><dd>{SITE.teamEmail ? <a href={`mailto:${SITE.teamEmail}`}>{SITE.teamEmail}</a> : <Todo text="team email" />}</dd></div>
+          <div><dt>Social</dt><dd>{SITE.socials.length ? SITE.socials.map((s) => <a href={s.href} rel="me noopener">{s.label}</a>) : <Todo text="socials" />}</dd></div>
+          <div><dt>Where</dt><dd>{SITE.institution}<br />Calgary, Alberta</dd></div>
+        </dl>
+      </div>
+
+      <div class="card form-card">
+        <form class="contact-form" data-form data-endpoint={SITE.formEndpoint ?? ""} novalidate>
+          <div class="field">
+            <label for="f-name">Name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err" />
+            <p class="err" id="f-name-err" data-err-for="f-name" hidden>Please tell us your name.</p>
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-err" />
+            <p class="err" id="f-email-err" data-err-for="f-email" hidden>Please enter an email address we can reply to, like name@example.com.</p>
+          </div>
+          <div class="field">
+            <label for="f-org">Organisation <span class="opt">(optional)</span></label>
+            <input id="f-org" name="organisation" type="text" autocomplete="organization" />
+          </div>
+          <div class="field">
+            <label for="f-reason">Reason</label>
+            <select id="f-reason" name="reason" required aria-describedby="f-reason-err">
+              <option value="">Choose one</option>
+              {reasons.map((r) => <option value={r}>{r}</option>)}
+            </select>
+            <p class="err" id="f-reason-err" data-err-for="f-reason" hidden>Please choose a reason.</p>
+          </div>
+          <div class="field">
+            <label for="f-msg">Message</label>
+            <textarea id="f-msg" name="message" rows="6" required minlength="10" aria-describedby="f-msg-err"></textarea>
+            <p class="err" id="f-msg-err" data-err-for="f-msg" hidden>Please write a message (at least 10 characters).</p>
+          </div>
+          <button class="btn btn-primary" type="submit" data-submit>
+            <span data-submit-label>Send message</span><Wheel size={20} spin class="submit-spin" />
+          </button>
+          <p class="form-status" data-status role="status" aria-live="polite"></p>
+          {!SITE.formEndpoint && <p class="small backend-todo"><Todo text="form backend: Formspree / Netlify Forms / mailto, Jeet decides. Messages are not sent yet." /></p>}
+        </form>
+        <div class="success" data-success hidden tabindex="-1">
+          <Icon name="check" size={32} class="success-icon" />
+          <h2>Message sent</h2>
+          <p>Thanks for getting in touch. We'll reply to the email address you gave us.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-form]");
+  const status = document.querySelector<HTMLElement>("[data-status]");
+  const success = document.querySelector<HTMLElement>("[data-success]");
+  const submit = document.querySelector<HTMLButtonElement>("[data-submit]");
+
+  // Pre-select a reason from ?reason=Sponsorship (used by the Partners page).
+  const pre = new URLSearchParams(location.search).get("reason");
+  const sel = document.querySelector<HTMLSelectElement>("#f-reason");
+  if (pre && sel && [...sel.options].some((o) => o.value === pre)) sel.value = pre;
+
+  const fields = form ? [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("input, select, textarea")] : [];
+  const check = (el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+    const err = form?.querySelector<HTMLElement>(`[data-err-for="${el.id}"]`);
+    if (!err) return true;
+    const ok = el.checkValidity() && (el.tagName !== "TEXTAREA" || el.value.trim().length >= 10);
+    err.hidden = ok;
+    el.setAttribute("aria-invalid", ok ? "false" : "true");
+    return ok;
+  };
+  // Inline validation: after the first blur, re-check as the user types.
+  fields.forEach((el) => {
+    el.addEventListener("blur", () => { el.dataset.touched = "1"; check(el); });
+    el.addEventListener("input", () => { if (el.dataset.touched) check(el); });
+  });
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!status || !submit || !success) return;
+    status.textContent = "";
+    const results = fields.map((el) => { el.dataset.touched = "1"; return check(el); });
+    if (results.includes(false)) {
+      fields.find((el) => el.getAttribute("aria-invalid") === "true")?.focus();
+      return;
+    }
+    const endpoint = form.dataset.endpoint;
+    if (!endpoint) {
+      status.textContent = "This form isn't connected yet, so your message was not sent. Please try again later.";
+      status.classList.add("is-error");
+      return;
+    }
+    submit.disabled = true;
+    submit.classList.add("is-busy");
+    try {
+      const res = await fetch(endpoint, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
+      if (!res.ok) throw new Error(String(res.status));
+      form.hidden = true;
+      success.hidden = false;
+      success.focus();
+    } catch {
+      status.textContent = "Something went wrong and your message was not sent. Please try again in a moment.";
+      status.classList.add("is-error");
+    } finally {
+      submit.disabled = false;
+      submit.classList.remove("is-busy");
+    }
+  });
+</script>
+
+<style>
+  .contact-grid { display: grid; gap: 48px; }
+  @media (min-width: 960px) { .contact-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; } }
+  .intro { margin-top: 24px; }
+  .direct { margin: 32px 0 0; display: grid; gap: 20px; }
+  .direct dt { font: 600 12px/1.4 var(--font-display); letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+  .direct dd { margin: 0; }
+  .form-card { padding: 32px 24px; }
+  @media (min-width: 640px) { .form-card { padding: 40px; } }
+  .contact-form { display: grid; gap: 20px; }
+  .field { display: grid; gap: 6px; }
+  label { font-weight: 700; font-size: 16px; }
+  .opt { font-weight: 400; color: var(--text-muted); }
+  input, select, textarea {
+    font: 400 17px/1.4 var(--font-body); color: var(--text); background: var(--bg);
+    border: 1px solid var(--text-muted); border-radius: var(--radius-sm); padding: 12px 14px; min-height: 48px; width: 100%;
+  }
+  textarea { resize: vertical; min-height: 140px; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  [aria-invalid="true"] { border-color: var(--primary); border-width: 2px; }
+  .err { margin: 0; color: var(--link); font-size: 15px; font-weight: 500; }
+  .contact-form .btn { justify-self: start; }
+  :global(.submit-spin) { display: none; }
+  .is-busy :global(.submit-spin) { display: block; }
+  .form-status { margin: 0; }
+  .form-status:empty { display: none; }
+  .form-status.is-error { color: var(--link); font-weight: 500; }
+  .backend-todo { margin: 0; }
+  .success { display: grid; gap: 12px; justify-items: start; outline: none; }
+  .success :global(.success-icon) { color: var(--primary); }
+</style>

@@ -1,0 +1,18 @@
+---
+// The mission patch, inlined so its Archivo Expanded ring text uses the page's web fonts (branding.md §2.1).
+// Never recolour, rotate, crop or frame it (§2.2). Minimum 96 px; use favicon.svg below that.
+import raw from "../../public/brand/stampede-patch.svg?raw";
+interface Props { size?: string; decorative?: boolean; class?: string; id?: string }
+const { size = "440px", decorative = false, class: cls, id = "p" + Math.random().toString(36).slice(2, 7) } = Astro.props;
+let svg = raw
+  .replace(/<\?xml[^>]*>\s*/, "")
+  .replace(/<style>@import[^<]*<\/style>\s*/, "")
+  .replace(/\b(scenem|arctopm|arcbotm|bowClip)\b/g, `$1-${id}`)
+  .replace(/ width="800" height="800"/, ` width="100%" height="100%" focusable="false"`);
+if (decorative) svg = svg.replace(/ role="img" aria-label="[^"]*"/, ' aria-hidden="true"').replace(/<title>[^<]*<\/title>/, "");
+---
+<div class:list={["patch", cls]} style={`--patch-size:${size}`} set:html={svg} />
+<style>
+  .patch { width: var(--patch-size); max-width: 100%; aspect-ratio: 1; flex: none; }
+  .patch :global(svg) { width: 100%; height: 100%; }
+</style>

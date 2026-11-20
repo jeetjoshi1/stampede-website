@@ -1,0 +1,44 @@
+:root {
+  /* Core palette */
+  --calgary-red: #A6192E;  --red-bright: #C8102E;  --maroon: #6E0F1D;
+  --gold: #C9A13B;         --gold-light: #F2CD6A;  --gold-ink: #8A6A1E;
+  --white: #FFFFFF;        --cream: #F7F1E6;       --paper: #F7F4EE;
+  --ink: #1E2A33;          --ink-muted: #4A5560;   --line: #E3DED5;
+  --night: #0E1726;        --night-surface: #172338; --night-line: #2A3A55;
+  --snow: #F5F1EA;         --snow-muted: #A9B4C2;
+  --tint-1: #EED8D0;       --tint-2: #DDB2A9;
+
+  /* Type */
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-body: "Archivo", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Spacing, radius, motion */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px;
+  --space-6: 32px; --space-7: 48px; --space-8: 64px; --space-9: 96px; --space-10: 128px;
+  --radius-sm: 6px; --radius-md: 12px; --radius-pill: 999px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --container: 1200px;
+
+  /* Light theme (default) */
+  --bg: #FFFFFF;        --bg-alt: #F7F1E6;     --surface: #FFFFFF;
+  --text: #1E2A33;      --text-muted: #4A5560; --border: #E3DED5;
+  --primary: #A6192E;   --primary-hover: #C8102E; --on-primary: #FFFFFF;
+  --accent: #C9A13B;    --link: #A6192E;       --focus: #C8102E;
+}
+[data-theme="dark"] {
+  --bg: #0E1726;        --bg-alt: #121D30;     --surface: #172338;
+  --text: #F5F1EA;      --text-muted: #A9B4C2; --border: #2A3A55;
+  --primary: #C8102E;   --primary-hover: #E0283F; --on-primary: #FFFFFF;
+  --accent: #F2CD6A;    --link: #F2CD6A;       --focus: #F2CD6A;
+}
+
+/* No-JS fallback: follow the OS setting until the theme script sets data-theme (branding.md §4). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1726;        --bg-alt: #121D30;     --surface: #172338;
+    --text: #F5F1EA;      --text-muted: #A9B4C2; --border: #2A3A55;
+    --primary: #C8102E;   --primary-hover: #E0283F; --on-primary: #FFFFFF;
+    --accent: #F2CD6A;    --link: #F2CD6A;       --focus: #F2CD6A;
+  }
+}

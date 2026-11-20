@@ -1,0 +1,100 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Todo from "../components/Todo.astro";
+import Icon from "../components/Icon.astro";
+import Wheel from "../components/Wheel.astro";
+import { SITE } from "../lib/site";
+
+const partners = (await getCollection("partners")).sort((a, b) => a.data.order - b.data.order);
+const tiers = ["Program", "Funding", "Industry", "Academic"] as const;
+const uses = [
+  { title: "Hardware", text: "Reaction wheels, motor drivers, the IMU, the flight computer and the test-article structure." },
+  { title: "Travel", text: "Getting the team and the experiment to the flight campaign, and to IEEE CCECE 2027 in Toronto in May." },
+  { title: "Testing", text: "Ground testing before flight: wheel characterisation, estimator validation and flight-safety checks." },
+];
+---
+<BaseLayout title="Partners" description="The organisations supporting STAMPEDE, and how to become a partner of a Calgary team flying in CAN-RGX X.">
+  <section class="section" aria-labelledby="page-title">
+    <div class="container">
+      <Eyebrow>Partners &amp; support</Eyebrow>
+      <h1 id="page-title">Partners</h1>
+      <p class="lede intro">
+        STAMPEDE is only possible because people backed a student idea before it flew. Thank you to everyone below for helping
+        a Calgary team get an experiment into reduced gravity.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="tiers-title">
+    <div class="container">
+      <h2 id="tiers-title" class="visually-hidden">Our partners</h2>
+      <div class="tiers">
+        {tiers.map((tier) => {
+          const list = partners.filter((p) => p.data.tier === tier);
+          return (
+            <div class="tier" data-reveal>
+              <h3 class="tier-name">{tier}</h3>
+              {list.length ? (
+                <ul class="partner-grid">
+                  {list.map((p) => (
+                    <li class="card partner">
+                      {p.data.logo ? <img src={p.data.logo} alt={p.data.name} class="partner-logo" loading="lazy" /> : <span class="partner-name">{p.data.name}</span>}
+                      {p.data.support ? <span class="small">{p.data.support}</span> : <Todo text="what they support" />}
+                      {p.data.url && <a href={p.data.url} rel="noopener" class="small">Website <Icon name="external-link" size={16} /></a>}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p><Todo text={`${tier.toLowerCase()} partners`} /></p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <p class="logo-note small">Logos appear only with a partner's written permission. Until then, we list names.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="become-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>Become a partner</Eyebrow>
+        <h2 id="become-title">Where your support goes</h2>
+      </div>
+      <ul class="cards cards-3 uses">
+        {uses.map((u) => (
+          <li class="card card-accent" data-reveal>
+            <Wheel size={24} class="use-icon" />
+            <h3>{u.title}</h3>
+            <p>{u.text}</p>
+          </li>
+        ))}
+      </ul>
+      <div class="btn-row become-actions" data-reveal>
+        <a class="btn btn-primary" href="/contact?reason=Sponsorship">Talk to us about sponsorship <Icon name="arrow-right" /></a>
+        {SITE.sponsorshipPdf ? (
+          <a class="btn btn-outline" href={SITE.sponsorshipPdf} download><Icon name="download" /> Sponsorship package (PDF)</a>
+        ) : (
+          <Todo text="sponsorship package PDF" />
+        )}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro { margin-top: 24px; }
+  .tiers { display: grid; gap: 40px; }
+  .tier-name { font: 600 12px/1.4 var(--font-display); letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; }
+  .partner-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
+  .partner { display: grid; gap: 8px; align-content: center; min-height: 112px; }
+  .partner-name { font-weight: 700; font-size: 20px; }
+  .partner-logo { max-height: 56px; width: auto; filter: grayscale(1); transition: filter 150ms var(--ease); }
+  .partner:hover .partner-logo { filter: none; }
+  .logo-note { margin-top: 32px; }
+  .uses { list-style: none; padding: 0; margin: 0; }
+  .uses :global(.use-icon) { color: var(--accent); margin-bottom: 16px; }
+  .become-actions { margin-top: 40px; align-items: center; }
+</style>

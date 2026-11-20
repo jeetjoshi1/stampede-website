@@ -1,0 +1,58 @@
+# TEAM: edit at /admin (Team members), or by hand here.
+# Each person is one item. id must be unique, lowercase, no spaces. null shows a [TODO] chip.
+# group: Leadership, Software & Controls, Mechanical, Electrical or Advisor (Advisor is left off the home page).
+
+- id: jeet-joshi
+  order: 1
+  name: Jeet Joshi
+  role: Team Lead, Software & Integration
+  discipline: Mechanical Engineering, 2nd year · Aerospace minor
+  bio: Ties the reaction-wheel hardware and the onboard estimator together into one working experiment.
+  linkedin: https://www.linkedin.com/in/joshijeet7/
+  photo: null
+  group: Leadership
+- id: sadeeb-dewan
+  order: 2
+  name: Sadeeb Dewan
+  role: Mechanical Design & Outreach Lead
+  discipline: Mechanical Engineering, 2nd year · Mechatronics minor
+  bio: Designs the hardware that holds the experiment together and shares the project with the community.
+  linkedin: https://www.linkedin.com/in/sadeebdewan/
+  photo: null
+  group: Mechanical
+- id: software-1
+  order: 3
+  name: null
+  role: null
+  discipline: null
+  bio: null
+  linkedin: null
+  photo: null
+  group: Software & Controls
+- id: electrical-1
+  order: 4
+  name: null
+  role: null
+  discipline: null
+  bio: null
+  linkedin: null
+  photo: null
+  group: Electrical
+- id: member-5
+  order: 5
+  name: null
+  role: null
+  discipline: null
+  bio: null
+  linkedin: null
+  photo: null
+  group: Mechanical
+- id: advisor
+  order: 6
+  name: null
+  role: Faculty Advisor (PI)
+  discipline: null
+  bio: null
+  linkedin: null
+  photo: null
+  group: Advisor

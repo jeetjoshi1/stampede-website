@@ -1,0 +1,80 @@
+---
+import { SITE } from "../lib/site";
+import Patch from "./Patch.astro";
+import Skyline from "./Skyline.astro";
+import Todo from "./Todo.astro";
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <Skyline id="footer" class="footer-skyline" />
+  <div class="scope-night footer-body">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <!-- Lockup built from the patch + live wordmark so it reads on --night without recolouring the logo files. -->
+        <a class="lockup" href="/" aria-label="STAMPEDE home">
+          <Patch size="112px" decorative id="footer" />
+          <span class="lockup-text">
+            <span class="lockup-word">STAMPEDE</span>
+            <span class="lockup-sub">CAN-RGX X</span>
+          </span>
+        </a>
+        <p class="footer-fullname">{SITE.fullName}</p>
+        <p class="footer-mission">{SITE.mission}</p>
+      </div>
+      <nav class="footer-cols" aria-label="Footer">
+        <div>
+          <h2 class="footer-h">Explore</h2>
+          <ul>
+            <li><a href="/experiment">The experiment</a></li>
+            <li><a href="/team">Team</a></li>
+            <li><a href="/progress">Progress</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-h">Connect</h2>
+          <ul>
+            <li><a href="/partners">Partners &amp; support</a></li>
+            <li><a href="/outreach">Outreach &amp; media</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-h">Follow</h2>
+          <ul>
+            {SITE.socials.length ? SITE.socials.map((s) => <li><a href={s.href} rel="me noopener">{s.label}</a></li>) : <li><Todo text="social links" /></li>}
+            <li>{SITE.teamEmail ? <a href={`mailto:${SITE.teamEmail}`}>{SITE.teamEmail}</a> : <Todo text="team email" />}</li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="container footer-base">
+      <p>{SITE.institution}</p>
+      <p>© {year} STAMPEDE</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { margin-top: 0; }
+  .footer-skyline { margin-bottom: -1px; }
+  .footer-body { padding: 48px 0 32px; }
+  .footer-grid { display: grid; gap: 48px; }
+  @media (min-width: 960px) { .footer-grid { grid-template-columns: 5fr 7fr; gap: 64px; } }
+  .lockup { display: inline-flex; align-items: center; gap: 20px; text-decoration: none; }
+  .lockup-text { display: grid; gap: 8px; }
+  .lockup-word { font: 800 clamp(22px, 6vw, 32px)/1 var(--font-display); letter-spacing: 0.02em; color: var(--snow); }
+  .lockup-sub { font: 600 14px/1 var(--font-display); letter-spacing: 0.18em; color: var(--gold-light); }
+  .footer-fullname { font: 400 14px/1.5 var(--font-body); color: var(--text-muted); margin: 20px 0 8px; }
+  .footer-mission { color: var(--text); margin: 0; }
+  .footer-cols { display: grid; gap: 32px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+  .footer-h { font: 600 12px/1.4 var(--font-display); letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+  .footer-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .footer-cols > * { min-width: 0; }
+  .footer-cols a { display: inline-flex; align-items: center; min-height: 44px; max-width: 100%; overflow-wrap: anywhere; }
+  .footer-base {
+    margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px;
+    font-size: 14px; color: var(--text-muted);
+  }
+  .footer-base p { margin: 0; }
+</style>

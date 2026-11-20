@@ -1,0 +1,348 @@
+---
+import katex from "katex";
+import "katex/dist/katex.min.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import OrbitDivider from "../components/OrbitDivider.astro";
+
+// Facts on this page come from the STAMPEDE CAN-RGX proposal (Nov 2026). Prototype values may change at PDR (Feb 2027).
+const tex = (s: string, display = true) => katex.renderToString(s, { displayMode: display, throwOnError: true, output: "htmlAndMathml" });
+
+const eqDyn = tex(String.raw`\mathbf{I}\,\dot{\boldsymbol{\omega}} + \boldsymbol{\omega} \times \left(\mathbf{I}\,\boldsymbol{\omega} + \mathbf{h}\right) + \dot{\mathbf{h}} = m\,\mathbf{r}_c \times \mathbf{g}_{\text{res}}`);
+const eqWindow = tex(String.raw`\begin{aligned} &\mathbf{I}\,\Delta\boldsymbol{\omega} + \int_{t}^{t+\Delta t} \boldsymbol{\omega} \times \left(\mathbf{I}\,\boldsymbol{\omega} + \mathbf{h}\right) dt \\ &\qquad -\; m\,\mathbf{r}_c \times \int_{t}^{t+\Delta t} \mathbf{g}_{\text{res}}\, dt = -\,\Delta\mathbf{h} \end{aligned}`);
+const eqTensor = tex(String.raw`\mathbf{I} = \begin{bmatrix} I_{xx} & I_{xy} & I_{xz} \\ I_{xy} & I_{yy} & I_{yz} \\ I_{xz} & I_{yz} & I_{zz} \end{bmatrix}`);
+const eqLinear = tex(String.raw`\begin{aligned} \boldsymbol{\Phi}_k\,\boldsymbol{\theta} &= -\,\Delta\mathbf{h}_k \\ \boldsymbol{\theta} &=\begin{bmatrix} I_{xx} & I_{yy} & I_{zz} & I_{xy} & I_{xz} & I_{yz} & r_{c,x} & r_{c,y} & r_{c,z} \end{bmatrix}^{\mathsf T} \end{aligned}`);
+const i = (s: string) => tex(s, false);
+
+const specs = [
+  { item: "Test article mass (design limit)", value: "≤ 5", unit: "kg" },
+  { item: "Test article + gimbal envelope", value: "500 × 500 × 500", unit: "mm" },
+  { item: "Reaction wheels", value: "4, in a 45° pyramid", unit: "—" },
+  { item: "Wheel motors / drivers", value: "TMotor MN5008-class / Flipsky VESC", unit: "—" },
+  { item: "Max wheel torque", value: "0.04", unit: "N·m" },
+  { item: "Max wheel speed", value: "4500", unit: "rpm" },
+  { item: "IMU", value: "BNO085", unit: "—" },
+  { item: "Gyro sample rate / data logging", value: "100", unit: "Hz" },
+  { item: "Flight computer", value: "Raspberry Pi 5", unit: "—" },
+  { item: "Estimator update rate", value: "10 (every 0.1 s window)", unit: "Hz" },
+  { item: "Gimbal", value: "3-axis, absolute encoder on each axis", unit: "—" },
+  { item: "Supply voltage", value: "24 (from the aircraft's 115 V outlet)", unit: "V" },
+];
+
+const extras = [
+  { title: "A known inertia change", text: "Two movable masses shift between the flight blocks, creating an inertia change we know from CAD. The estimator has to detect it." },
+  { title: "A wheel fault", text: "One wheel is run at 50 % and then switched off, to test whether the estimate holds up and the fault can be detected." },
+  { title: "The same tests in 1 g", text: "Every test is repeated on the ground to measure gravity bias. There, a centre-of-mass offset of just 0.4 mm already causes more than 5 % error, which is why we fly." },
+  { title: "Open source", text: "The estimator and simulation will be released as open source for Canadian student CubeSat teams." },
+];
+---
+<BaseLayout title="The Experiment" description="How STAMPEDE uses reaction wheels to estimate the full inertia tensor of a gimbal-mounted test article in reduced gravity, onboard and in real time, with recursive least squares and an extended Kalman filter.">
+  <section class="section page-hero" aria-labelledby="page-title">
+    <div class="container">
+      <Eyebrow>The experiment</Eyebrow>
+      <h1 id="page-title" class="h1">Measuring inertia where gravity lets go.</h1>
+      <div class="intro">
+        <p class="lede">
+          <strong>STAMPEDE</strong> stands for <em>Spacecraft Tensor And Mass Property Estimation During Excitation</em>.
+          A test article rotates freely on a low-friction three-axis gimbal inside our experiment case. In each microgravity window of a
+          parabolic flight, four reaction wheels run a planned excitation profile and the article turns in response. From the measured
+          wheel speeds and body rates, the flight computer estimates its full inertia tensor in real time with recursive least squares
+          (<span class="mono">RLS</span>), with an extended Kalman filter (<span class="mono">EKF</span>) running alongside.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="objective">
+    <div class="container split">
+      <div data-reveal>
+        <Eyebrow>Objective</Eyebrow>
+        <h2 id="objective">What we're measuring, and why</h2>
+      </div>
+      <div data-reveal>
+        <p>
+          The <strong>inertia tensor</strong> describes how a body's mass is distributed. It is a symmetric 3 × 3 matrix with six
+          independent values: three moments of inertia on the diagonal and three products of inertia off it. It decides how a
+          spacecraft turns when a torque is applied.
+        </p>
+        <p>
+          We estimate all six, plus the three components of the centre-of-mass offset from the gimbal pivot, using only the
+          article's own wheels and sensors, in real time on the flight computer rather than afterwards on the ground.
+        </p>
+        <h3 class="criteria-title">Success criteria</h3>
+        <ul class="criteria">
+          <li>Principal moments of inertia within <strong>5 %</strong> of ground truth, from a single 12 s window.</li>
+          <li>Onboard estimate within <strong>2 %</strong> of the post-flight batch estimate.</li>
+          <li>Detect an inertia change of <strong>3 % or more</strong> between flight blocks.</li>
+        </ul>
+        <p class="small criteria-note">
+          Ground truth comes from two independent references: a CAD model updated with every measured component mass, and
+          identification on the SPACE Lab spherical air bearing. In simulation, 19 of 20 runs came within 2.3 %.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="how">
+    <div class="container split">
+      <div data-reveal>
+        <Eyebrow>How it works</Eyebrow>
+        <h2 id="how">One test article, its own wheels, its own sensors</h2>
+        <p class="how-copy">
+          A base bolted inside a Pelican case carries a three-axis gimbal with an absolute encoder on each axis, a gimbal lock and an
+          accelerometer. The test article sits on the gimbal: it can rotate about any axis but cannot move around, so nothing floats loose.
+        </p>
+        <p>
+          The article is a two-floor plate structure. The IMU sits at the centre of the lower floor beside vertical beams carrying
+          stacked mass discs; the upper floor carries the battery box, the Raspberry Pi 5 flight computer and power distribution, with the
+          four reaction wheels on angled mounts underneath.
+        </p>
+        <p>
+          The lock holds the article through the 2 g pull-up. After a manual start it releases 4 s into microgravity, the wheels run a
+          12 s profile with tones between about 0.25 and 0.67 Hz on each axis, and the lock re-engages.
+        </p>
+      </div>
+      <aside class="glance card card-accent" data-reveal aria-labelledby="glance-title">
+        <h3 id="glance-title">At a glance</h3>
+        <dl>
+          <div><dt>Mount</dt><dd>3-axis gimbal, encoder on each axis</dd></div>
+          <div><dt>Actuators</dt><dd>4 reaction wheels, 45° pyramid</dd></div>
+          <div><dt>Sensors</dt><dd>IMU gyro, wheel speeds, case accelerometer</dd></div>
+          <div><dt>Unknowns</dt><dd>6 inertia values + 3 centre-of-mass offsets</dd></div>
+          <div><dt>Window</dt><dd>12 s per parabola</dd></div>
+          <div><dt>Estimate</dt><dd>RLS + EKF, updated every 0.1 s</dd></div>
+          <div><dt>Computer</dt><dd>Raspberry Pi 5, on the article</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <div class="container"><OrbitDivider id="exp-1" /></div>
+
+  <section class="section" aria-labelledby="physics">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>The physics</Eyebrow>
+        <h2 id="physics">Euler's equations, with wheels</h2>
+      </div>
+      <div class="physics" data-reveal>
+        <div>
+          <p>
+            On the gimbal, the article rotates about a fixed pivot. Written about that pivot, Euler's rotational equations for a body
+            carrying spinning wheels relate its rate <span set:html={i(String.raw`\boldsymbol{\omega}`)} />, its inertia tensor{" "}
+            <span set:html={i(String.raw`\mathbf{I}`)} /> and the wheels' angular momentum <span set:html={i(String.raw`\mathbf{h}`)} />:
+          </p>
+          <div class="eq" set:html={eqDyn} />
+          <p>
+            Changing wheel speed changes <span set:html={i(String.raw`\mathbf{h}`)} />, and the body turns the other way. That is the
+            excitation. We know <span set:html={i(String.raw`\mathbf{h}`)} /> from the measured wheel speeds and measure{" "}
+            <span set:html={i(String.raw`\boldsymbol{\omega}`)} /> with the IMU gyro. The right side is the small torque from residual cabin
+            acceleration <span set:html={i(String.raw`\mathbf{g}_{\text{res}}`)} /> acting on the centre-of-mass offset{" "}
+            <span set:html={i(String.raw`\mathbf{r}_c`)} />; the case accelerometer measures it and the gimbal encoders rotate it into the body frame.
+          </p>
+          <p>
+            Rather than differentiate noisy gyro data, we integrate over each window of length Δt = 0.1 s:
+          </p>
+          <div class="eq" set:html={eqWindow} />
+          <p>Every term is linear in the nine unknowns, so each window adds a row block to a regression:</p>
+          <div class="eq" set:html={eqLinear} />
+        </div>
+        <aside class="physics-side">
+          <div class="eq eq-card card" set:html={eqTensor} />
+          <p class="callout">τ = I·α, generalised to three axes.<br />9 unknowns: Ixx Iyy Izz Ixy Ixz Iyz + r<sub>c</sub> (x, y, z)</p>
+          <p class="callout">Excitation must rotate the body about more than one axis, or some products of inertia stay unobservable.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="estimation">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>Onboard estimation</Eyebrow>
+        <h2 id="estimation">Two estimators in flight</h2>
+        <p>
+          Both run on the flight computer, which rides on the rotating article. The live estimate is sent by radio to a laptop on board.
+          After flight, batch least squares and constrained least squares on the logged data give two more answers to compare against.
+        </p>
+      </div>
+      <div class="cards cards-2">
+        <article class="card card-accent" data-reveal>
+          <p class="mono est-tag">RLS</p>
+          <h3>Recursive least squares</h3>
+          <p>The primary real-time estimate. It solves the windowed regression above, updating all nine values after every 0.1 s window.</p>
+          <ul>
+            <li>Uses the integrated dynamics, so gyro rates are never differentiated.</li>
+            <li>Updates at 10 Hz, each within 100 ms.</li>
+            <li>Aims to converge within a single 12 s window.</li>
+          </ul>
+        </article>
+        <article class="card card-accent" data-reveal>
+          <p class="mono est-tag">EKF</p>
+          <h3>Extended Kalman filter</h3>
+          <p>Runs alongside RLS on the flight computer, updating after every 0.1 s window.</p>
+          <ul>
+            <li>Can follow an inertia that changes during a run.</li>
+            <li>Being added to the simulation for the preliminary design review (Feb 2027).</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="flight">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>Flight profile</Eyebrow>
+        <h2 id="flight">Up to 20 seconds at a time</h2>
+        <p>
+          The NRC Falcon 20 climbs steeply at about 2 g, then pushes over so the aircraft and everything in it fall together for
+          15–20 s. Our gimbal unlocks 4 s in and the experiment runs for 12 s before relocking; then the aircraft pulls out at about
+          2 g and the cycle repeats.
+        </p>
+      </div>
+      <figure class="parabola card" data-reveal>
+        <svg viewBox="0 0 900 300" role="img" aria-labelledby="para-title para-desc">
+          <title id="para-title">Parabolic flight profile</title>
+          <desc id="para-desc">Altitude against time: level flight, a pull-up at about 2 g, a parabolic arc giving 15 to 20 seconds of microgravity with a 12-second experiment window inside it, and a pull-out at about 2 g back to level flight.</desc>
+          <line class="p-grid" x1="40" y1="250" x2="880" y2="250" />
+          <line class="p-grid" x1="40" y1="40" x2="40" y2="250" />
+          <rect class="p-zero" x="330" y="40" width="240" height="210" />
+          <rect class="p-window" x="378" y="40" width="144" height="210" />
+          <path class="p-path" d="M40,220 L190,220 C250,220 270,150 330,95 Q450,-5 570,95 C630,150 650,220 710,220 L880,220" />
+          <g class="p-label">
+            <text x="110" y="240" text-anchor="middle">level · 1 g</text>
+            <text x="262" y="132" text-anchor="end">pull-up · ~2 g</text>
+            <text x="450" y="128" text-anchor="middle" class="p-key">microgravity · 15–20 s</text>
+            <text x="450" y="200" text-anchor="middle">experiment · 12 s</text>
+            <text x="638" y="132">pull-out · ~2 g</text>
+            <text x="795" y="240" text-anchor="middle">level · 1 g</text>
+            <text x="460" y="272" text-anchor="middle">time →</text>
+          </g>
+        </svg>
+        <figcaption class="small">Approximate values. The shaded band is our 12 s experiment window.</figcaption>
+      </figure>
+      <div class="stats" data-reveal>
+        <div class="stat"><span><span class="stat-value">15–20</span><span class="stat-unit">s</span></span><span class="stat-caption">Microgravity per parabola</span></div>
+        <div class="stat"><span><span class="stat-value">12</span><span class="stat-unit">s</span></span><span class="stat-caption">Experiment window</span></div>
+        <div class="stat"><span><span class="stat-value">~2</span><span class="stat-unit">g</span></span><span class="stat-caption">Pull-up and pull-out</span></div>
+        <div class="stat"><span class="stat-value">12</span><span class="stat-caption">Parabolas per flight, in two blocks of six</span></div>
+        <div class="stat"><span class="stat-value">2</span><span class="stat-caption">Flight days</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="tests">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>Test plan</Eyebrow>
+        <h2 id="tests">More than one measurement</h2>
+        <p>Every run uses the same wheel profile, apart from a no-command baseline, so runs can be compared directly.</p>
+      </div>
+      <div class="cards cards-2">
+        {extras.map((x) => (
+          <div class="card" data-reveal><h3>{x.title}</h3><p>{x.text}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="hardware">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>Hardware</Eyebrow>
+        <h2 id="hardware">Specifications</h2>
+        <p>Prototype values from our proposal. Components may change at the preliminary design review (Feb 2027).</p>
+      </div>
+      <div class="table-wrap" data-reveal>
+        <table class="spec-table">
+          <caption class="visually-hidden">Test article hardware specifications</caption>
+          <thead><tr><th scope="col">Item</th><th scope="col">Value</th><th scope="col" class="unit">Unit</th></tr></thead>
+          <tbody>
+            {specs.map((s) => (
+              <tr><th scope="row">{s.item}</th><td>{s.value}</td><td class="unit">{s.unit}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="small spec-note">
+        Other sensors: wheel-speed telemetry from the drivers, a lock-position sensor shown on the laptop, and temperatures logged
+        every run. All data is logged at 100 Hz on a common time base and downloaded after flight.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="safety">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <Eyebrow>Safety &amp; constraints</Eyebrow>
+        <h2 id="safety">Designed to fly with people around it</h2>
+      </div>
+      <div class="cards cards-3">
+        <div class="card" data-reveal>
+          <h3>Containment</h3>
+          <p>
+            The test article is captive on its gimbal, so nothing floats free. Every part is fastened, the Pelican case stays closed
+            during parabolas, the gimbal is locked in every phase except microgravity, and damped mechanical stops guard against contact.
+          </p>
+        </div>
+        <div class="card" data-reveal>
+          <h3>Power</h3>
+          <p>
+            Our preferred design runs on 24 V from a supply on the aircraft's 115 V outlet, carried to the article through slip rings;
+            the alternative is a 24 V Ni-Cd pack. No lithium. A 4 A slow-blow fuse, a latching E-stop and a motor-power relay protect
+            the circuit, with a worst case of about 2.5 A and 285 W against our 4 A / 300 W limits.
+          </p>
+        </div>
+        <div class="card" data-reveal>
+          <h3>Flight safety</h3>
+          <p>
+            Three independent inhibits: E-stop, motor-power enable and a fail-locked gimbal lock. The structure is designed for 2 g
+            with a 1.5 safety factor, every run needs a manual start, and the experiment is safe if power is lost. It passes design
+            reviews in February and April 2027 and a flight readiness review in June.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero { padding-bottom: 48px; }
+  .page-hero h1 { max-width: 20ch; }
+  .intro { margin-top: 24px; }
+  .how-copy { margin-top: 16px; }
+
+  .parabola svg { width: 100%; height: auto; }
+  .parabola figcaption { margin-top: 12px; }
+
+  .glance { align-self: start; }
+  .glance dl { margin: 16px 0 0; display: grid; }
+  .glance dl > div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); }
+  .glance dt { font: 600 12px/1.6 var(--font-display); letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
+  .glance dd { margin: 0; font-size: 16px; }
+  .physics { display: grid; gap: 32px; }
+  .physics > * { min-width: 0; }
+  @media (min-width: 960px) { .physics { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: 48px; } }
+  .eq { overflow-x: auto; overflow-y: hidden; padding: 4px 0; margin: 8px 0 24px; color: var(--text); }
+  .eq-card { margin: 0 0 16px; }
+  .physics-side .callout + .callout { margin-top: 16px; }
+  .physics-side { align-self: start; }
+
+  .est-tag { color: var(--eyebrow); font-weight: 600; margin: 0 0 8px; }
+  .card ul { margin: 16px 0 0; padding-left: 1.1em; display: grid; gap: 6px; }
+
+  .parabola { margin: 0; }
+  .p-grid { stroke: var(--border); stroke-width: 1.5; }
+  .p-zero { fill: var(--bg-alt); }
+  .p-path { fill: none; stroke: var(--primary); stroke-width: 3; }
+  .p-label { font: 400 15px var(--font-mono); fill: var(--text-muted); }
+  .p-key { fill: var(--text); font-weight: 600; }
+  .stats { display: flex; flex-wrap: wrap; gap: 32px 64px; margin-top: 40px; }
+  .p-window { fill: var(--accent); opacity: 0.18; }
+
+  .criteria-title { margin-top: 28px; }
+  .criteria { margin: 12px 0 0; padding-left: 1.1em; display: grid; gap: 8px; }
+  .criteria-note { margin-top: 16px !important; max-width: 62ch; }
+  .spec-note { margin-top: 16px; max-width: 80ch; }
+</style>

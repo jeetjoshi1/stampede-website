@@ -1,0 +1,70 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import FullName from "../components/FullName.astro";
+import Headshot from "../components/Headshot.astro";
+import Patch from "../components/Patch.astro";
+import Icon from "../components/Icon.astro";
+import Todo from "../components/Todo.astro";
+
+const members = (await getCollection("team")).sort((a, b) => a.data.order - b.data.order);
+const initials = (n: string | null) => (n ? n.split(/\s+/).map((p) => p[0]).join("").slice(0, 2) : undefined);
+---
+<BaseLayout title="Team" description="The STAMPEDE team: University of Calgary engineering students building a reduced-gravity inertia-estimation experiment for CAN-RGX X.">
+  <section class="section team-hero" aria-labelledby="page-title">
+    <div class="container team-intro">
+      <div>
+        <Eyebrow>The team</Eyebrow>
+        <h1 id="page-title">Team</h1>
+        <FullName acronym class="team-fullname" />
+        <p class="lede">
+          STAMPEDE is a student team from the University of Calgary's Schulich School of Engineering, flying in CAN-RGX X in 2027.
+          We're designing the experiment end to end, from the reaction-wheel assembly to the onboard estimation software.
+        </p>
+        <p><Todo text="team size and disciplines" /></p>
+      </div>
+      <Patch size="220px" class="team-patch" id="team" />
+    </div>
+  </section>
+
+  <section class="section members" aria-labelledby="members-title">
+    <div class="container">
+      <h2 id="members-title" class="visually-hidden">Team members</h2>
+      <ul class="member-grid">
+        {members.map((m) => (
+          <li class="card member" data-reveal>
+            <Headshot src={m.data.photo} alt={m.data.name ? `Photo of ${m.data.name}` : "Photo to come"} size={128} initials={initials(m.data.name)} />
+            <div class="member-body">
+              <h3>{m.data.name ?? <Todo text="name" />}</h3>
+              <p class="member-role">{m.data.role ?? <Todo text="role" />}</p>
+              <p class="small">{m.data.discipline ?? <Todo text="discipline, year" />}</p>
+              <p class="member-bio">{m.data.bio ?? <Todo text="one-line bio" />}</p>
+              {m.data.linkedin ? (
+                <a class="member-link" href={m.data.linkedin} rel="noopener" aria-label={`${m.data.name} on LinkedIn`}><Icon name="linkedin" /></a>
+              ) : (
+                <Todo text="LinkedIn" />
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .team-intro { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 960px) { .team-intro { grid-template-columns: minmax(0, 1fr) auto; gap: 64px; } }
+  .team-intro .lede { margin-top: 24px; }
+  :global(.team-fullname) { margin-top: 16px; }
+  :global(.team-patch) { justify-self: center; margin: 24px 56px; }
+  .members { padding-top: 0; }
+  .member-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+  .member { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+  .member-body { display: grid; gap: 6px; justify-items: center; }
+  .member-body p { margin: 0; }
+  .member-role { font-weight: 500; color: var(--link); }
+  .member-bio { margin-top: 6px !important; }
+  .member-link { display: inline-grid; place-items: center; width: 44px; height: 44px; color: var(--link); }
+</style>
