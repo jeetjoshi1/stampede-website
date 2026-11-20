@@ -2,15 +2,17 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { SITE } from "../lib/site";
+import { SITE, type EditLink } from "../lib/site";
 
 interface Props {
   /** Page name, e.g. "Team". Omit on Home. */
   title?: string;
   description?: string;
   noindex?: boolean;
+  /** Shortcuts into /admin for this page's content. Shown only in browsers signed in to the admin. */
+  edit?: EditLink[];
 }
-const { title, description = SITE.description, noindex: pageNoindex = false } = Astro.props;
+const { title, description = SITE.description, noindex: pageNoindex = false, edit = [] } = Astro.props;
 // Temporary/preview builds: NOINDEX=1 keeps every page out of search engines.
 const noindex = pageNoindex || process.env.NOINDEX === "1";
 const fullTitle = title ? `${title} — STAMPEDE` : `STAMPEDE — ${SITE.fullName}`;
@@ -71,6 +73,13 @@ const ogImage = Astro.site ? new URL("/brand/og-image.png", Astro.site).href : "
     </main>
     <Footer />
 
+    {edit.length > 0 && (
+      <nav class="edit-bar scope-night" aria-label="Edit this page" hidden data-edit-bar>
+        <span class="edit-bar-label">Edit</span>
+        {edit.map((e) => <a href={e.href} target="_blank" rel="noopener">{e.label}</a>)}
+      </nav>
+    )}
+
     <script>
       // Theme toggle (remembers the choice; storage wrapped in try/catch).
       const root = document.documentElement;
@@ -92,6 +101,11 @@ const ogImage = Astro.site ? new URL("/brand/og-image.png", Astro.site).href : "
         try { saved = localStorage.getItem("theme"); } catch {}
         if (!saved) { root.setAttribute("data-theme", e.matches ? "dark" : "light"); syncToggle(); }
       });
+
+      // "Edit this page" bar: only for browsers that have signed in to /admin (key set by the CMS).
+      try {
+        if (localStorage.getItem("sveltia-cms.user")) document.querySelector<HTMLElement>("[data-edit-bar]")?.removeAttribute("hidden");
+      } catch {}
 
       // Header border once scrolled.
       const header = document.querySelector("[data-header]");

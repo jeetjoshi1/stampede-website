@@ -5,7 +5,7 @@ import Eyebrow from "../components/Eyebrow.astro";
 import Todo from "../components/Todo.astro";
 import Icon from "../components/Icon.astro";
 import Patch from "../components/Patch.astro";
-import { SITE } from "../lib/site";
+import { SITE, ADMIN } from "../lib/site";
 
 const events = (await getCollection("events")).sort((a, b) => a.data.order - b.data.order);
 const talks = events.filter((e) => e.data.kind !== "Media");
@@ -14,7 +14,7 @@ const gallery = await getCollection("gallery");
 const boilerplate =
   "STAMPEDE (Spacecraft Tensor And Mass Property Estimation During Excitation) is a student team from the University of Calgary's Schulich School of Engineering, selected for CAN-RGX X, the Canadian Reduced Gravity Experiment design challenge, with its flight campaign planned for 2027. A test article rotates freely on a three-axis gimbal while four reaction wheels excite it during the microgravity phases of a parabolic flight on the NRC Falcon 20; from the measured wheel speeds and body rates, the flight computer estimates its full inertia tensor in real time using recursive least squares, with an extended Kalman filter running alongside. The work supports in-orbit estimation of spacecraft mass properties for better attitude control.";
 ---
-<BaseLayout title="Outreach" description="STAMPEDE talks, events, media mentions, photos and press kit.">
+<BaseLayout edit={[{ label: "Talks & events", href: ADMIN.entry("site", "events") }, { label: "Photo gallery", href: ADMIN.entry("site", "gallery") }]} title="Outreach" description="STAMPEDE talks, events, media mentions, photos and press kit.">
   <section class="section" aria-labelledby="page-title">
     <div class="container">
       <Eyebrow>Outreach &amp; media</Eyebrow>

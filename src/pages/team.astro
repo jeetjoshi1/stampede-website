@@ -1,4 +1,5 @@
 ---
+import { ADMIN } from "../lib/site";
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Eyebrow from "../components/Eyebrow.astro";
@@ -11,7 +12,7 @@ import Todo from "../components/Todo.astro";
 const members = (await getCollection("team")).sort((a, b) => a.data.order - b.data.order);
 const initials = (n: string | null) => (n ? n.split(/\s+/).map((p) => p[0]).join("").slice(0, 2) : undefined);
 ---
-<BaseLayout title="Team" description="The STAMPEDE team: University of Calgary engineering students building a reduced-gravity inertia-estimation experiment for CAN-RGX X.">
+<BaseLayout edit={[{ label: "Team members", href: ADMIN.entry("site", "team") }]} title="Team" description="The STAMPEDE team: University of Calgary engineering students building a reduced-gravity inertia-estimation experiment for CAN-RGX X.">
   <section class="section team-hero" aria-labelledby="page-title">
     <div class="container team-intro">
       <div>

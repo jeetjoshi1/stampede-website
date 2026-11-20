@@ -4,10 +4,10 @@ import Eyebrow from "../components/Eyebrow.astro";
 import Todo from "../components/Todo.astro";
 import Icon from "../components/Icon.astro";
 import Wheel from "../components/Wheel.astro";
-import { SITE } from "../lib/site";
+import { SITE, ADMIN } from "../lib/site";
 const reasons = ["Sponsorship", "Media", "Other"];
 ---
-<BaseLayout title="Contact" description="Get in touch with STAMPEDE about sponsorship, media or anything else.">
+<BaseLayout edit={[{ label: "Site settings", href: ADMIN.entry("site", "settings") }]} title="Contact" description="Get in touch with STAMPEDE about sponsorship, media or anything else.">
   <section class="section" aria-labelledby="page-title">
     <div class="container contact-grid">
       <div>

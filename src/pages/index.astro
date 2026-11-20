@@ -11,7 +11,7 @@ import Todo from "../components/Todo.astro";
 import Icon from "../components/Icon.astro";
 import Headshot from "../components/Headshot.astro";
 import OrbitDivider from "../components/OrbitDivider.astro";
-import { SITE } from "../lib/site";
+import { SITE, ADMIN } from "../lib/site";
 
 const team = (await getCollection("team")).filter((m) => m.data.group !== "Advisor").sort((a, b) => a.data.order - b.data.order);
 const timeline = (await getCollection("timeline")).sort((a, b) => a.data.order - b.data.order);
@@ -26,7 +26,7 @@ const steps = [
   { verb: "Measure", text: "From measured wheel speeds and body rates, the flight computer estimates the full inertia tensor in real time.", tag: "RLS + EKF · 10 Hz" },
 ];
 ---
-<BaseLayout>
+<BaseLayout edit={[{ label: "Site settings", href: ADMIN.entry("site", "settings") }, { label: "Team", href: ADMIN.entry("site", "team") }, { label: "Timeline", href: ADMIN.entry("site", "timeline") }, { label: "Partners", href: ADMIN.entry("site", "partners") }]}>
   <!-- 1. Hero: always cream, maroon skyline along the bottom (branding.md §4, §9.1) -->
   <section class="hero scope-cream" aria-labelledby="hero-title">
     <div class="hero-sat" aria-hidden="true"><Satellite size={72} /></div>

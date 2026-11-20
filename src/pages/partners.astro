@@ -5,7 +5,7 @@ import Eyebrow from "../components/Eyebrow.astro";
 import Todo from "../components/Todo.astro";
 import Icon from "../components/Icon.astro";
 import Wheel from "../components/Wheel.astro";
-import { SITE } from "../lib/site";
+import { SITE, ADMIN } from "../lib/site";
 
 const partners = (await getCollection("partners")).sort((a, b) => a.data.order - b.data.order);
 const tiers = ["Program", "Funding", "Industry", "Academic"] as const;
@@ -15,7 +15,7 @@ const uses = [
   { title: "Testing", text: "Ground testing before flight: wheel characterisation, estimator validation and flight-safety checks." },
 ];
 ---
-<BaseLayout title="Partners" description="The organisations supporting STAMPEDE, and how to become a partner of a Calgary team flying in CAN-RGX X.">
+<BaseLayout edit={[{ label: "Partners", href: ADMIN.entry("site", "partners") }, { label: "Site settings", href: ADMIN.entry("site", "settings") }]} title="Partners" description="The organisations supporting STAMPEDE, and how to become a partner of a Calgary team flying in CAN-RGX X.">
   <section class="section" aria-labelledby="page-title">
     <div class="container">
       <Eyebrow>Partners &amp; support</Eyebrow>
