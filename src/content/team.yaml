@@ -17,12 +17,14 @@
 - id: vivek-nair
   order: 3
   name: Vivek Nair
+  role: Software & Integration and Finance Lead
   discipline: Mechanical Engineering, 3rd year · Mechatronics minor
   linkedin: https://www.linkedin.com/in/vivek-nair-3a0b18315/
   group: Software & Controls
 - id: neev-mistry
   order: 4
   name: Neev Mistry
+  role: Mechanical Design
   discipline: Mechanical Engineering, 2nd year
   linkedin: https://www.linkedin.com/in/neevmistry/
   group: Electrical
