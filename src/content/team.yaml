@@ -14,6 +14,7 @@
   discipline: Mechanical Engineering, 2nd year · Mechatronics minor
   bio: Designs the hardware that holds the experiment together and shares the project with the community.
   linkedin: https://www.linkedin.com/in/sadeebdewan/
+  photo: /uploads/pasted-image-1795755364447.png
   group: Mechanical
 - id: vivek-nair
   order: 3
@@ -21,19 +22,24 @@
   role: Software & Integration and Finance Lead
   discipline: Mechanical Engineering, 3rd year · Mechatronics minor
   linkedin: https://www.linkedin.com/in/vivek-nair-3a0b18315/
+  photo: /uploads/pasted-image-1795755417495.png
   group: Software & Controls
 - id: neev-mistry
   order: 4
   name: Neev Mistry
   role: Mechanical Design
   discipline: Mechanical Engineering, 2nd year
+  bio: Designs the hardware that holds the experiment together and shares the project with the community.
   linkedin: https://www.linkedin.com/in/neevmistry/
+  photo: /uploads/pasted-image-1795755388845.png
   group: Electrical
 - id: tam-nguyen
   order: 5
   name: Tam Nguyen
+  role: Outreach and Electrical
   discipline: Astrophysics, 3rd Year
   linkedin: https://www.linkedin.com/in/tam-nguyen11/
+  photo: /uploads/pasted-image-1795755443324.png
   group: Mechanical
 - id: advisor
   order: 6
